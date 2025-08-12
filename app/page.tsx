@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -23,7 +23,184 @@ import {
   MessageSquare,
   Expand,
   FileArchiveIcon as Compress,
+  ChevronLeft,
+  ChevronRight,
+  Pause,
+  Play,
 } from "lucide-react"
+
+// Experience Slideshow Component
+const ExperienceSlideshow = () => {
+  const experiences = [
+    {
+      title: "Quality Assurance Tester Intern",
+      company: "RingZero Networks (Thailand) Co., Ltd.",
+      period: "Jun 2025 – Jul 2025",
+      location: "Bangkok, Thailand",
+      description: [
+        "Performed regression testing on Stitch (Apple's Game of the Year 2023) and Puffies (Apple's Game of the Year 2024), covering functionality, UI/UX, gameplay mechanics, and platform compatibility. Led comprehensive testing across Apple platforms—iPhone, iPad, Mac, Apple TV—ensuring cross-device consistency.",
+        "Built an AI-powered, RAG-based POS Assistant FastAPI service, applying vector similarity search and Star Schema modeling. Integrated RAG workflows and data pipelines (ETL/ELT) to enable natural language querying of real-time sales data."
+      ],
+      image: "https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/qat.jpg",
+      alt: "QA Team at RingZero Networks"
+    },
+    {
+      title: "Blockchain Developer",
+      company: "Google Developer Group (VIT Campus)",
+      period: "Jan 2023 – Present",
+      location: "Vellore, India",
+      description: [
+        "Contributing to blockchain projects and community initiatives with the GDG VIT team, focusing on decentralized applications and smart contract development.",
+        "Organizing workshops and hackathons to promote blockchain technology adoption among students and developers."
+      ],
+      image: "https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/gdg.jpg",
+      alt: "Google Developer Group Team"
+    },
+    {
+      title: "Technical Team Member",
+      company: "The Android Club (VIT Campus)",
+      period: "Aug 2022 – Present",
+      location: "Vellore, India",
+      description: [
+        "Android development and technical workshops with the campus developer community, focusing on mobile application development and UI/UX design.",
+        "Mentoring junior members and contributing to club projects that enhance campus technology infrastructure."
+      ],
+      image: "https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/adc.jpeg",
+      alt: "Android Club Team"
+    }
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const slideInterval = useRef<NodeJS.Timeout | null>(null);
+
+  // Function to go to the next slide
+  const nextSlide = useCallback(() => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % experiences.length);
+  }, [experiences.length]);
+
+  // Function to go to the previous slide
+  const prevSlide = useCallback(() => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + experiences.length) % experiences.length);
+  }, [experiences.length]);
+
+  // Toggle play/pause
+  const togglePlayPause = useCallback(() => {
+    setIsPlaying(prev => !prev);
+  }, []);
+
+  // Setup and clear interval for automatic sliding
+  useEffect(() => {
+    if (isPlaying) {
+      slideInterval.current = setInterval(() => {
+        nextSlide();
+      }, 3000); // 3 seconds interval
+    }
+    
+    return () => {
+      if (slideInterval.current) {
+        clearInterval(slideInterval.current);
+      }
+    };
+  }, [isPlaying, nextSlide]);
+
+  return (
+     <div className="relative overflow-hidden">
+       {/* Slides */}
+       <div className="relative w-full min-h-[500px]">
+         {experiences.map((experience, index) => (
+           <div 
+             key={index}
+             className={`w-full transition-all duration-700 ${index === currentIndex ? 'opacity-100 translate-x-0' : 'opacity-0 absolute top-0 left-0 translate-x-8'}`}
+             style={{ display: index === currentIndex ? 'block' : 'none' }}
+           >
+             <div className="flex flex-col md:flex-row min-h-[500px]">
+               {/* Text Content (Left) */}
+               <div className="md:w-1/2 p-6 md:p-10 flex flex-col justify-center z-10">
+                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{experience.title}</h3>
+                 <h4 className="text-lg font-medium text-blue-600 mb-4">{experience.company}</h4>
+                 
+                 <div className="flex items-center text-gray-600 mb-2">
+                   <Calendar className="h-4 w-4 mr-2" />
+                   <span>{experience.period}</span>
+                 </div>
+                 
+                 <div className="flex items-center text-gray-600 mb-6">
+                   <MapPin className="h-4 w-4 mr-2" />
+                   <span>{experience.location}</span>
+                 </div>
+                 
+                 <div className="space-y-4">
+                   {experience.description.map((paragraph, i) => (
+                     <p key={i} className="text-gray-700 leading-relaxed">{paragraph}</p>
+                   ))}
+                 </div>
+               </div>
+               
+               {/* Image (Right) */}
+               <div className="md:w-1/2 relative">
+                 <div className="h-64 md:h-full relative overflow-hidden">
+                   <img 
+                     src={experience.image} 
+                     alt={experience.alt}
+                     className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                   />
+                 </div>
+               </div>
+             </div>
+           </div>
+         ))}
+       </div>
+       
+       {/* Navigation Controls */}
+       <div className="absolute bottom-6 left-0 right-0 flex justify-center items-center space-x-6 z-10">
+         {/* Previous button */}
+         <button 
+           onClick={prevSlide}
+           className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm text-gray-800 hover:bg-white hover:shadow-lg transition-all shadow-md"
+           aria-label="Previous slide"
+         >
+           <ChevronLeft className="h-5 w-5" />
+         </button>
+         
+         {/* Play/Pause button */}
+         <button 
+           onClick={togglePlayPause}
+           className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm text-gray-800 hover:bg-white hover:shadow-lg transition-all shadow-md"
+           aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
+         >
+           {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+         </button>
+         
+         {/* Next button */}
+         <button 
+           onClick={nextSlide}
+           className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm text-gray-800 hover:bg-white hover:shadow-lg transition-all shadow-md"
+           aria-label="Next slide"
+         >
+           <ChevronRight className="h-5 w-5" />
+         </button>
+       </div>
+       
+       {/* Slide indicators */}
+       <div className="absolute bottom-20 left-0 right-0 flex justify-center space-x-3">
+         {experiences.map((_, index) => (
+           <button
+             key={index}
+             onClick={() => setCurrentIndex(index)}
+             className={`w-3 h-3 rounded-full transition-all ${index === currentIndex ? 'bg-blue-600 scale-125' : 'bg-gray-300 hover:bg-gray-400'}`}
+             aria-label={`Go to slide ${index + 1}`}
+           />
+         ))}
+       </div>
+       
+       {/* Slide counter */}
+       <div className="absolute top-6 right-6 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium text-gray-700 shadow-sm">
+         {currentIndex + 1} / {experiences.length}
+       </div>
+     </div>
+   );
+};
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("hero")
@@ -333,116 +510,11 @@ export default function Portfolio() {
             <div className="w-24 h-1 bg-blue-600 mx-auto"></div>
           </div>
 
-          <div className="space-y-8">
-            {/* Main Internship */}
-            <Card className="border-l-4 border-l-blue-600 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                      <div>
-                        <CardTitle className="text-xl text-gray-900">Quality Assurance Tester Intern</CardTitle>
-                        <CardDescription className="text-lg font-medium text-blue-600">
-                          RingZero Networks (Thailand) Co., Ltd.
-                        </CardDescription>
-                      </div>
-                      <div className="flex items-center text-gray-600 mt-2 md:mt-0">
-                        <Calendar className="h-4 w-4 mr-2" />
-                        Jun 2025 – Jul 2025
-                      </div>
-                    </div>
-                    <div className="flex items-center text-gray-600 mt-2">
-                      <MapPin className="h-4 w-4 mr-2" />
-                      Bangkok, Thailand
-                    </div>
-                  </div>
-                  <div className="md:ml-6 flex-shrink-0">
-                    <img
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/qat-g6fBWvWYDwi7se3ih7a77SoPCZ9vkk.jpeg"
-                      alt="QA Team at RingZero Networks"
-                      className="w-24 h-16 md:w-32 md:h-20 object-cover rounded-lg shadow-sm"
-                    />
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <p className="text-gray-700">
-                    Performed regression testing on <strong>Stitch (Apple's Game of the Year 2023)</strong> and{" "}
-                    <strong>Puffies (Apple's Game of the Year 2024)</strong>, covering functionality, UI/UX, gameplay
-                    mechanics, and platform compatibility. Led comprehensive testing across Apple platforms—iPhone,
-                    iPad, Mac, Apple TV—ensuring cross-device consistency.
-                  </p>
-                  <p className="text-gray-700">
-                    Built an <strong>AI-powered, RAG-based POS Assistant FastAPI service</strong>, applying vector
-                    similarity search and Star Schema modeling. Integrated RAG workflows and data pipelines (ETL/ELT) to
-                    enable natural language querying of real-time sales data.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Other Experiences */}
-            <div className="grid md:grid-cols-3 gap-6">
-              <Card className="hover:shadow-lg transition-shadow overflow-hidden">
-                <div className="relative h-32 overflow-hidden">
-                  <img
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/gdg.jpg-ETShXvvwM5I0NFCkZcNa2lPK6hmUhV.jpeg"
-                    alt="Google Developer Group Team"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-lg">Blockchain Developer</CardTitle>
-                  <CardDescription>Google Developer Group (VIT Campus)</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 text-sm">
-                    Contributing to blockchain projects and community initiatives with the GDG VIT team
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow overflow-hidden">
-                <div className="relative h-32 overflow-hidden">
-                  <img
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/adc-SItOupji4RwgOmdgzG8WOTjENI7NNc.jpeg"
-                    alt="Android Club Team"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-lg">Technical Team Member</CardTitle>
-                  <CardDescription>The Android Club (VIT Campus)</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 text-sm">
-                    Android development and technical workshops with the campus developer community
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow overflow-hidden">
-                <div className="relative h-32 overflow-hidden">
-                  <img
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chq-t8nGU0oNOkzfNtqDuJzyc2KzY24ZkQ.jpeg"
-                    alt="CraftHQ Fellowship"
-                    className="w-full h-full object-cover bg-gray-900"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-lg">Fellowship</CardTitle>
-                  <CardDescription>crftHQ</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 text-sm">
-                    Technology fellowship program focused on innovative development practices
-                  </p>
-                </CardContent>
-              </Card>
+          <div>
+            {/* Experience Slideshow */}
+            <div className="relative border border-gray-200 rounded-xl shadow-lg overflow-hidden bg-white">
+              {/* Slideshow Component */}
+              <ExperienceSlideshow />
             </div>
           </div>
         </div>
