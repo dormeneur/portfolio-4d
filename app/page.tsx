@@ -229,12 +229,12 @@ export default function Portfolio() {
                   {/* Profile Image */}
                   <div className="relative">
                     <img
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pp.jpg-dnwr8MaShqCTXbagijTqQMIgoKptWV.jpeg"
+                      src="https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/pp.jpg"
                       alt="Aditya Bharti"
                       className="w-full h-[430px] rounded-xl object-contain bg-gray-50 shadow-xl border-4 border-white"
                     />
                     <img
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/github-dcqZmq41dmXEfH9SeS5hSenglwvuOx.jpeg"
+                      src="https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/github.jpeg"
                       alt="GitHub Profile"
                       className="w-16 h-16 rounded-full object-cover shadow-lg border-4 border-white absolute -bottom-2 -right-2 bg-gray-900 p-1"
                     />
