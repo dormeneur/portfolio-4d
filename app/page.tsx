@@ -461,7 +461,7 @@ export default function Portfolio() {
             <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white border border-gray-200">
               <div className="relative overflow-hidden rounded-t-lg">
                 <img
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/vhelp.jpg-AAEasPtVDRYjICLyXasSsatZ7OUu3F.jpeg"
+                  src="https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/vhelp.png"
                   alt="VHelp App"
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
