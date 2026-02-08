@@ -1,0 +1,54 @@
+Aditya Bharti
+
+B.Tech in Computer Science and Engineering, Third Year
+
+Chennai, India | LinkedIn | GitHub | work.adityabharti@gmail.com | +91 8840538333
+Bangkok, Thailand | LinkedIn | GitHub | work.adityabharti@gmail.com | +66 0917970234
+
+Profile
+Thai national (OCI Holder - Authorized to work in India) raised in India, Third-year Computer Science undergraduate (VIT ’27) focused on scalable mobile and backend development. Committed to building reliable, well-tested software with strong attention to detail, code quality, and user experience. Fluent in English and Hindi; conversational in Thai.
+
+Education
+1. Vellore Institute of Technology, Chennai, India CGPA: 8.54 / 10
+    • Bachelor of Technology – Computer Science and Engineering Aug 2023 – May 2027
+    • Relevant Coursework: Data Structures & Algorithms, Design and Analysis of Algorithms, Object-Oriented Programming, Operating Systems, Database Systems
+
+Work Experience & Extracurriculars
+1. Integra Global Solutions (Chennai, India) Dec 2025 – Jan 2026
+    • Software Development Engineer (SDE) Intern
+    • Worked on real-world software development tasks, following structured reporting and professional development workflows.
+    • Collaborated with team members to maintain code quality, meet delivery timelines, and adapt to industry-standard software engineering practices.
+2. RingZero Networks Co., Ltd. (Bangkok, Thailand) Jun 2025 – Jul 2025
+    • Quality Assurance Tester Intern
+    • Performed regression testing on Stitch (Apple’s Game of the Year 2023) and Puffies (Apple’s Game of the Year 2024) across iPhone, iPad, Mac, and Apple TV, covering functionality, UI/UX, gameplay, and compatibility.
+    • Built an AI-powered, RAG-based POS Assistant FastAPI service using vector similarity search, enabling natural language queries over sales data via ETL pipelines.
+3. Google Developers Group (GDG, VIT Chennai) Oct 2024 – Sep 2025
+    • Blockchain Developer
+    • Assisted in organizing events, providing technical support, and coordinating with team members.
+
+Selected Projects
+1. V Help — College Services & Student Utility App
+    • Developed a unified college services app for academics, food, and repairs, serving 1100+ daily active users.
+    • Integrated Firebase Auth, push notifications, Firestore + Supabase hybrid storage, and admin dashboards.
+2. Queez — AI-Powered Learning & Live Quiz Platform
+    • Built a 2nd place Hack-N-Droid 2025 hackathon-winning mobile app within 24 hours.
+    • A real-time, cross-platform Flutter learning app with WebSocket-powered live multiplayer leaderboards, AI-generated study content, quizzes, flashcards, and notes.
+3. Deepfake Detection Using Gait Analysis
+    • Developed a machine learning pipeline for deepfake detection using biometric gait patterns, focusing on full-body movement rather than face-based cues.
+    • Engineered temporal gait features capturing walking rhythm and joint motion to improve robustness against manipulated videos.
+
+Technical Skills
+1. Programming Languages: Python, C, C++, Java, Embedded C, R, Solidity
+2. AI / Machine Learning: PyTorch, OpenCV, CNN-based Computer Vision, Model Training & Evaluation,Retrieval-Augmented Generation (RAG), Vector Databases, Feature Extraction
+3. Systems & Software: Modular System Design, Real-Time Processing, Automation Pipelines, Secure Data Handling, API-Based Workflows
+4. Frameworks & Tools: Git, AWS, Docker, LangChain, Flutter, Postman, FastAPI,Figma
+5. Embedded & Compute Platforms: Arduino, Raspberry Pi, Embedded Controllers
+
+Link to my resume:
+1. India: https://drive.google.com/file/d/1y8SddS1SY37tiPVTdXX52OhmErGoGb0j/view?usp=drive_link
+2. Thailand: https://drive.google.com/file/d/1piRTl0dw7cQWOTB5gMpdeGt2kQe9x3A4/view?usp=drive_link
+
+Other links:
+1. LinkedIn: https://www.linkedin.com/in/aadityabhartii/
+2. GitHub: https://github.com/adityabharti
+3. Portfolio: https://adityabharti.vercel.app

@@ -1,1209 +1,324 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { AnimatedSection, TypewriterText } from "@/components/animated-section"
 import {
   Github,
   Linkedin,
   Mail,
-  Phone,
-  ExternalLink,
+  ArrowRight,
   ChevronDown,
-  Menu,
-  X,
-  MapPin,
-  Calendar,
-  Award,
+  Sparkles,
   Code,
-  Briefcase,
-  GraduationCap,
-  User,
-  MessageSquare,
-  Expand,
-  FileArchiveIcon as Compress,
-  ChevronLeft,
-  ChevronRight,
-  Pause,
-  Play,
+  Cpu,
+  Zap,
+  Copy,
+  Check,
+  ExternalLink,
 } from "lucide-react"
 
-// Experience Slideshow Component
-const ExperienceSlideshow = () => {
-  const experiences = [
-    {
-      title: "Quality Assurance Tester Intern",
-      company: "RingZero Networks (Thailand) Co., Ltd.",
-      period: "Jun 2025 – Jul 2025",
-      location: "Bangkok, Thailand",
-      description: [
-        "Performed regression testing on Stitch (Apple's Game of the Year 2023) and Puffies (Apple's Game of the Year 2024), covering functionality, UI/UX, gameplay mechanics, and platform compatibility. Led comprehensive testing across Apple platforms—iPhone, iPad, Mac, Apple TV—ensuring cross-device consistency.",
-        "Built an AI-powered, RAG-based POS Assistant FastAPI service, applying vector similarity search and Star Schema modeling. Integrated RAG workflows and data pipelines (ETL/ELT) to enable natural language querying of real-time sales data."
-      ],
-      image: "https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/qat.jpg",
-      alt: "QA Team at RingZero Networks"
-    },
-    {
-      title: "Blockchain Developer",
-      company: "Google Developer Group (VIT Campus)",
-      period: "Jan 2023 – Present",
-      location: "Vellore, India",
-      description: [
-        "Contributing to blockchain projects and community initiatives with the GDG VIT team, focusing on decentralized applications and smart contract development.",
-        "Organizing workshops and hackathons to promote blockchain technology adoption among students and developers."
-      ],
-      image: "https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/gdg.jpg",
-      alt: "Google Developer Group Team"
-    },
-    {
-      title: "Technical Team Member",
-      company: "The Android Club (VIT Campus)",
-      period: "Aug 2022 – Present",
-      location: "Vellore, India",
-      description: [
-        "Android development and technical workshops with the campus developer community, focusing on mobile application development and UI/UX design.",
-        "Mentoring junior members and contributing to club projects that enhance campus technology infrastructure."
-      ],
-      image: "https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/adc.jpeg",
-      alt: "Android Club Team"
-    }
-  ];
+const stats = [
+  { value: "1100+", label: "App Users", icon: Zap },
+  { value: "4+", label: "Major Projects", icon: Code },
+  { value: "2nd", label: "Hackathon Win", icon: Sparkles },
+  { value: "8.54", label: "CGPA", icon: Cpu },
+]
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const slideInterval = useRef<NodeJS.Timeout | null>(null);
+const EMAIL = "work.adityabharti@gmail.com"
 
-  // Function to go to the next slide
-  const nextSlide = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % experiences.length);
-  }, [experiences.length]);
+function EmailButton() {
+  const [showEmail, setShowEmail] = useState(false)
+  const [copied, setCopied] = useState(false)
 
-  // Function to go to the previous slide
-  const prevSlide = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + experiences.length) % experiences.length);
-  }, [experiences.length]);
-
-  // Toggle play/pause
-  const togglePlayPause = useCallback(() => {
-    setIsPlaying(prev => !prev);
-  }, []);
-
-  // Setup and clear interval for automatic sliding
-  useEffect(() => {
-    if (isPlaying) {
-      slideInterval.current = setInterval(() => {
-        nextSlide();
-      }, 3000); // 3 seconds interval
-    }
-    
-    return () => {
-      if (slideInterval.current) {
-        clearInterval(slideInterval.current);
-      }
-    };
-  }, [isPlaying, nextSlide]);
-
-  return (
-     <div className="relative overflow-hidden">
-       {/* Slides */}
-       <div className="relative w-full min-h-[500px]">
-         {experiences.map((experience, index) => (
-           <div 
-             key={index}
-             className={`w-full transition-all duration-700 ${index === currentIndex ? 'opacity-100 translate-x-0' : 'opacity-0 absolute top-0 left-0 translate-x-8'}`}
-             style={{ display: index === currentIndex ? 'block' : 'none' }}
-           >
-             <div className="flex flex-col md:flex-row min-h-[500px]">
-               {/* Text Content (Left) */}
-               <div className="md:w-1/2 p-6 md:p-10 flex flex-col justify-center z-10">
-                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{experience.title}</h3>
-                 <h4 className="text-lg font-medium text-blue-600 mb-4">{experience.company}</h4>
-                 
-                 <div className="flex items-center text-gray-600 mb-2">
-                   <Calendar className="h-4 w-4 mr-2" />
-                   <span>{experience.period}</span>
-                 </div>
-                 
-                 <div className="flex items-center text-gray-600 mb-6">
-                   <MapPin className="h-4 w-4 mr-2" />
-                   <span>{experience.location}</span>
-                 </div>
-                 
-                 <div className="space-y-4">
-                   {experience.description.map((paragraph, i) => (
-                     <p key={i} className="text-gray-700 leading-relaxed">{paragraph}</p>
-                   ))}
-                 </div>
-               </div>
-               
-               {/* Image (Right) */}
-               <div className="md:w-1/2 relative">
-                 <div className="h-64 md:h-full relative overflow-hidden">
-                   <img 
-                     src={experience.image} 
-                     alt={experience.alt}
-                     className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                   />
-                 </div>
-               </div>
-             </div>
-           </div>
-         ))}
-       </div>
-       
-       {/* Navigation Controls */}
-       <div className="absolute bottom-6 left-0 right-0 flex justify-center items-center space-x-6 z-10">
-         {/* Previous button */}
-         <button 
-           onClick={prevSlide}
-           className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm text-gray-800 hover:bg-white hover:shadow-lg transition-all shadow-md"
-           aria-label="Previous slide"
-         >
-           <ChevronLeft className="h-5 w-5" />
-         </button>
-         
-         {/* Play/Pause button */}
-         <button 
-           onClick={togglePlayPause}
-           className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm text-gray-800 hover:bg-white hover:shadow-lg transition-all shadow-md"
-           aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
-         >
-           {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-         </button>
-         
-         {/* Next button */}
-         <button 
-           onClick={nextSlide}
-           className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm text-gray-800 hover:bg-white hover:shadow-lg transition-all shadow-md"
-           aria-label="Next slide"
-         >
-           <ChevronRight className="h-5 w-5" />
-         </button>
-       </div>
-       
-       {/* Slide indicators */}
-       <div className="absolute bottom-20 left-0 right-0 flex justify-center space-x-3">
-         {experiences.map((_, index) => (
-           <button
-             key={index}
-             onClick={() => setCurrentIndex(index)}
-             className={`w-3 h-3 rounded-full transition-all ${index === currentIndex ? 'bg-blue-600 scale-125' : 'bg-gray-300 hover:bg-gray-400'}`}
-             aria-label={`Go to slide ${index + 1}`}
-           />
-         ))}
-       </div>
-       
-       {/* Slide counter */}
-       <div className="absolute top-6 right-6 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium text-gray-700 shadow-sm">
-         {currentIndex + 1} / {experiences.length}
-       </div>
-     </div>
-   );
-};
-
-export default function Portfolio() {
-  const [activeSection, setActiveSection] = useState("hero")
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isPostExpanded, setIsPostExpanded] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ["hero", "about", "experience", "projects", "skills", "linkedin", "contact"]
-      const scrollPosition = window.scrollY + 100
-
-      for (const section of sections) {
-        const element = document.getElementById(section)
-        if (element) {
-          const { offsetTop, offsetHeight } = element
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section)
-            break
-          }
-        }
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-    setIsMenuOpen(false)
+  const copyEmail = async () => {
+    await navigator.clipboard.writeText(EMAIL)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
-  const navItems = [
-    { id: "hero", label: "Home", icon: User },
-    { id: "about", label: "About", icon: User },
-    { id: "experience", label: "Experience", icon: Briefcase },
-    { id: "projects", label: "Projects", icon: Code },
-    { id: "skills", label: "Skills", icon: Award },
-    { id: "linkedin", label: "LinkedIn", icon: MessageSquare },
-    { id: "contact", label: "Contact", icon: Mail },
-  ]
+  if (!showEmail) {
+    return (
+      <button
+        onClick={() => setShowEmail(true)}
+        className="p-3 rounded-full glass hover:bg-primary/10 hover:text-primary transition-all hover:scale-110"
+        aria-label="Show Email"
+      >
+        <Mail className="h-5 w-5" />
+      </button>
+    )
+  }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="font-bold text-xl text-gray-900">Aditya Bharti</div>
+    <div className="flex items-center gap-2 px-4 py-2 rounded-full glass-card animate-fade-in">
+      <Mail className="h-4 w-4 text-primary" />
+      <span className="text-sm font-mono">{EMAIL}</span>
+      <button
+        onClick={copyEmail}
+        className="p-1.5 rounded-md hover:bg-primary/10 transition-colors"
+        title="Copy email"
+      >
+        {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+      </button>
+      <a
+        href={`mailto:${EMAIL}`}
+        className="p-1.5 rounded-md hover:bg-primary/10 transition-colors"
+        title="Open in mail client"
+      >
+        <ExternalLink className="h-4 w-4" />
+      </a>
+    </div>
+  )
+}
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`px-3 py-2 text-sm font-medium transition-colors ${
-                    activeSection === item.id
-                      ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
+export default function HomePage() {
+  const [mounted, setMounted] = useState(false)
 
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </Button>
-            </div>
-          </div>
-        </div>
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navItems.map((item) => {
-                const Icon = item.icon
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                      activeSection === item.id
-                        ? "text-blue-600 bg-blue-50"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                    }`}
-                  >
-                    <Icon className="h-4 w-4 mr-3" />
-                    {item.label}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        )}
-      </nav>
-
+  return (
+    <div className="relative">
       {/* Hero Section */}
-      <section id="hero" className="pt-16 min-h-screen flex items-center relative overflow-hidden">
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage:
-              "url(/placeholder.svg?height=1080&width=1920&query=modern tech workspace with coding setup)",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-purple-900/90"></div>
+      <section className="relative min-h-[calc(100vh-4rem)] flex items-center overflow-hidden">
+        {/* Background with hero image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/hero.png"
+            alt="Aditya Bharti"
+            fill
+            className="object-cover object-center"
+            priority
+            quality={90}
+          />
+          {/* Gradient overlays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/40 dark:from-background dark:via-background/90 dark:to-background/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              Hi, I'm{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Aditya</span>
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-200 leading-relaxed">
-              Computer Science student | AI Systems and Blockchain enthusiast | Open to internships and project
-              collaborations | Aiming for a Tech-based startup.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Button
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
-                onClick={() => scrollToSection("projects")}
-              >
-                View My Work
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 bg-transparent"
-                onClick={() => scrollToSection("contact")}
-              >
-                Get In Touch
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 bg-transparent"
-                onClick={() => {
-                  window.open(
-                    "https://drive.google.com/uc?export=download&id=1Bp3ib1nLZPUzmz3pGZh0Vhoju9nJ47hi",
-                    "_blank",
-                  )
-                }}
-              >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+        {/* Floating decorative elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-1/4 left-1/3 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
+          <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-pink-500/20 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }} />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-2xl">
+            {/* Greeting badge */}
+            <AnimatedSection delay={0} animation="fade">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-6">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  Open for internships & collaborations
+                </span>
+              </div>
+            </AnimatedSection>
+
+            {/* Main heading */}
+            <AnimatedSection delay={200} animation="slide-up">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+                Hi, I'm{" "}
+                <span className="gradient-text">Aditya</span>
+              </h1>
+            </AnimatedSection>
+
+            {/* Tagline with typewriter effect */}
+            <AnimatedSection delay={400} animation="slide-up">
+              <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
+                {mounted ? (
+                  <TypewriterText
+                    text="Computer Science student crafting intelligent systems, mobile apps, and blockchain solutions."
+                    delay={600}
+                    speed={30}
                   />
-                </svg>
-                Download Resume
-              </Button>
-            </div>
-            <div className="flex space-x-6">
-              <a href="https://github.com/dormeneur" className="text-gray-300 hover:text-white transition-colors">
-                <Github className="h-6 w-6" />
-              </a>
-              <a
-                href="https://linkedin.com/in/aadityabhartii"
-                className="text-gray-300 hover:text-white transition-colors"
-              >
-                <Linkedin className="h-6 w-6" />
-              </a>
-              <a href="mailto:work.adityabharti@gmail.com" className="text-gray-300 hover:text-white transition-colors">
-                <Mail className="h-6 w-6" />
-              </a>
-            </div>
-          </div>
-        </div>
+                ) : (
+                  "Computer Science student crafting intelligent systems, mobile apps, and blockchain solutions."
+                )}
+              </p>
+            </AnimatedSection>
 
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
-          <ChevronDown className="h-8 w-8" />
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="mb-16">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">About Me</h2>
-                <div className="w-24 h-1 bg-blue-600 mx-auto"></div>
+            {/* CTA Buttons */}
+            <AnimatedSection delay={600} animation="slide-up">
+              <div className="flex flex-wrap gap-4 mb-10">
+                <Link href="/projects">
+                  <Button size="lg" className="group gap-2 bg-primary hover:bg-primary/90">
+                    View My Work
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+                <Link href="/hire-me">
+                  <Button size="lg" variant="outline" className="gap-2 glass">
+                    Hire Me
+                  </Button>
+                </Link>
+                <Link href="/resume">
+                  <Button size="lg" variant="ghost" className="gap-2">
+                    Resume
+                  </Button>
+                </Link>
               </div>
+            </AnimatedSection>
 
-              <div className="flex flex-col lg:flex-row gap-8 items-start">
-                {/* Left Column - Profile Image (Independent) */}
-                <div className="lg:w-2/5 w-full">
-                  {/* Profile Image */}
-                  <div className="relative">
-                    <img
-                      src="https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/pp.jpg"
-                      alt="Aditya Bharti"
-                      className="w-full h-[430px] rounded-xl object-contain bg-gray-50 shadow-xl border-4 border-white"
-                    />
-                    <img
-                      src="https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/github.jpeg"
-                      alt="GitHub Profile"
-                      className="w-16 h-16 rounded-full object-cover shadow-lg border-4 border-white absolute -bottom-2 -right-2 bg-gray-900 p-1"
-                    />
-                    <div className="text-center mt-4">
-                      <p className="text-sm text-gray-600 font-medium">@dormeneur</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right Column - Content (Independent) */}
-                <div className="lg:w-3/5 w-full space-y-6">
-                  {/* About Me Text */}
-                  <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 min-h-[240px] flex flex-col justify-center">
-                    <div className="space-y-3">
-                      <p className="text-base text-gray-700 leading-relaxed">
-                        I believe the future is all about automation: systems that adapt, simplify, and scale
-                        intelligently.
-                      </p>
-                      <p className="text-base text-gray-700 leading-relaxed">
-                        I'm a third-year Computer Science undergraduate specializing in AI and Robotics at Vellore
-                        Institute of Technology, India.
-                      </p>
-                      <p className="text-base text-gray-700 leading-relaxed">
-                        I'm open to internships, research, and development projects, particularly those focused on
-                        building purposeful, user-centric technology. I bring a creative, thoughtful, and hands-on
-                        approach to everything I work on.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Compact Interests Section */}
-                  <div className="bg-white rounded-xl p-5 shadow-lg border border-gray-100 min-h-[150px]">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">My Key Interests</h3>
-                    <div className="flex flex-wrap gap-3">
-                      {[
-                        { name: "RAG APIs & Databases", icon: "🔗", color: "bg-blue-50 border-blue-200 text-blue-700" },
-                        {
-                          name: "AI Automation & Robotics",
-                          icon: "🤖",
-                          color: "bg-purple-50 border-purple-200 text-purple-700",
-                        },
-                        { name: "Blockchain & Web3", icon: "⛓️", color: "bg-green-50 border-green-200 text-green-700" },
-                        {
-                          name: "Open Source & Linux",
-                          icon: "🐧",
-                          color: "bg-orange-50 border-orange-200 text-orange-700",
-                        },
-                        {
-                          name: "Full Stack Development",
-                          icon: "💻",
-                          color: "bg-indigo-50 border-indigo-200 text-indigo-700",
-                        },
-                      ].map((interest, index) => (
-                        <div
-                          key={index}
-                          className={`flex items-center px-3 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm hover:scale-105 ${interest.color}`}
-                        >
-                          <span className="text-sm mr-2">{interest.icon}</span>
-                          <span className="text-sm font-medium">{interest.name}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stats Section - Full Width */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 bg-white rounded-lg p-8 shadow-sm mt-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600">8.53</div>
-                  <div className="text-gray-600 text-sm">CGPA</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600">600+</div>
-                  <div className="text-gray-600 text-sm">App Users</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600">3+</div>
-                  <div className="text-gray-600 text-sm">Projects</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600">2nd</div>
-                  <div className="text-gray-600 text-sm">Prize Winner</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Experience Section */}
-      <section id="experience" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Experience</h2>
-            <div className="w-24 h-1 bg-blue-600 mx-auto"></div>
-          </div>
-
-          <div>
-            {/* Experience Slideshow */}
-            <div className="relative border border-gray-200 rounded-xl shadow-lg overflow-hidden bg-white">
-              {/* Slideshow Component */}
-              <ExperienceSlideshow />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section id="projects" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Featured Projects</h2>
-            <div className="w-24 h-1 bg-blue-600 mx-auto"></div>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* VHelp */}
-            <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white border border-gray-200">
-              <div className="relative overflow-hidden rounded-t-lg">
-                <img
-                  src="https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/vhelp.png"
-                  alt="VHelp App"
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute top-4 right-4">
-                  <Badge className="bg-green-500 text-white">Ongoing</Badge>
-                </div>
-                <div className="absolute top-4 left-4">
-                  <a
-                    href="https://github.com/dormeneur/VHELP"
-                    className="text-white hover:text-gray-300 transition-colors bg-black/20 p-2 rounded-full backdrop-blur-sm"
-                  >
-                    <Github className="h-4 w-4" />
-                  </a>
-                </div>
-              </div>
-
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-gray-900">VHelp</h3>
-                  <ExternalLink className="h-5 w-5 text-gray-400" />
-                </div>
-
-                <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-                  A full-stack Flutter application that revolutionizes campus life by providing seamless integration of
-                  essential services including food ordering, hostel management, academic resources, and student
-                  communication tools.
-                </p>
-
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                      <span className="text-sm font-semibold text-red-600">Problem</span>
-                    </div>
-                    <p className="text-xs text-gray-600 ml-4">
-                      Students at VIT Chennai faced fragmented digital services across campus, leading to inefficient
-                      processes for food ordering, hostel management, and academic tasks.
-                    </p>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
-                      <span className="text-sm font-semibold text-blue-600">Approach</span>
-                    </div>
-                    <p className="text-xs text-gray-600 ml-4">
-                      Developed a unified Flutter application with Firebase backend, implementing real-time
-                      synchronization, secure authentication, and scalable cloud architecture.
-                    </p>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-sm font-semibold text-green-600">Outcome</span>
-                    </div>
-                    <p className="text-xs text-gray-600 ml-4">
-                      Successfully onboarded 600+ active users, reduced service request processing time by 75%, and
-                      improved student satisfaction scores by 40%.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {["Flutter", "Firebase", "Real-time DB", "Push Notifications", "Cloud Functions"].map((tech) => (
-                    <Badge key={tech} variant="outline" className="text-xs bg-gray-50">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                    <span className="text-xs font-medium text-green-600">Campus-Scale Platform</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* JUNKWUNK */}
-            <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white border border-gray-200">
-              <div className="relative overflow-hidden rounded-t-lg">
-                <img
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/junkwunk.jpg-rW6FCY4ZVQRZLvEqOk5uqatwrNv8px.jpeg"
-                  alt="JunkWunk App"
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute top-4 right-4">
-                  <Badge className="bg-blue-500 text-white">Completed</Badge>
-                </div>
-                <div className="absolute top-4 left-4">
-                  <a
-                    href="https://github.com/dormeneur/JUNKWUNK"
-                    className="text-white hover:text-gray-300 transition-colors bg-black/20 p-2 rounded-full backdrop-blur-sm"
-                  >
-                    <Github className="h-4 w-4" />
-                  </a>
-                </div>
-              </div>
-
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-gray-900">Junk-Wunk</h3>
-                  <ExternalLink className="h-5 w-5 text-gray-400" />
-                </div>
-
-                <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-                  An innovative Flutter application that streamlines waste management processes, connecting rag pickers
-                  with sellers while promoting sustainable waste disposal practices.
-                </p>
-
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                      <span className="text-sm font-semibold text-red-600">Problem</span>
-                    </div>
-                    <p className="text-xs text-gray-600 ml-4">
-                      Inefficient waste management systems and lack of connection between waste collectors and sellers
-                      resulted in poor recycling rates and environmental impact.
-                    </p>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
-                      <span className="text-sm font-semibold text-blue-600">Approach</span>
-                    </div>
-                    <p className="text-xs text-gray-600 ml-4">
-                      Built an AI-powered mobile platform using real-time Firebase database for user connections, and
-                      intuitive UI/UX design.
-                    </p>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-sm font-semibold text-green-600">Outcome</span>
-                    </div>
-                    <p className="text-xs text-gray-600 ml-4">Won 2nd place at Hack-N-Droid 2025.</p>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {["Flutter", "Firebase", "Google Auth"].map((tech) => (
-                    <Badge key={tech} variant="outline" className="text-xs bg-gray-50">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-                    <span className="text-xs font-medium text-yellow-600">Hackathon Runner-Up</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* CYBER GALLERY & NFT */}
-            <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white border border-gray-200">
-              <div className="relative overflow-hidden rounded-t-lg">
-                <img
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/artgallery-tQ83hZzW8RJD87WSbUVpx8ouURkFYd.png"
-                  alt="Cyber Gallery NFT"
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute top-4 right-4">
-                  <Badge className="bg-purple-500 text-white">Completed</Badge>
-                </div>
-                <div className="absolute top-4 left-4">
-                  <a
-                    href="https://art-gallery-iota-one.vercel.app/"
-                    className="text-white hover:text-gray-300 transition-colors bg-black/20 p-2 rounded-full backdrop-blur-sm"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
-                </div>
-              </div>
-
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-gray-900">Cyber Gallery & NFT</h3>
-                  <ExternalLink className="h-5 w-5 text-gray-400" />
-                </div>
-
-                <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-                  A full-stack decentralized Web3 application on Ethereum Sepolia for minting digital art as ERC-721
-                  NFTs with cyberpunk aesthetics.
-                </p>
-
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                      <span className="text-sm font-semibold text-red-600">Problem</span>
-                    </div>
-                    <p className="text-xs text-gray-600 ml-4">
-                      Artists needed a decentralized platform to mint and showcase digital art as NFTs with seamless
-                      blockchain integration.
-                    </p>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
-                      <span className="text-sm font-semibold text-blue-600">Approach</span>
-                    </div>
-                    <p className="text-xs text-gray-600 ml-4">
-                      Built with Solidity smart contracts, IPFS storage via Pinata, MetaMask integration, and
-                      cyberpunk-themed frontend.
-                    </p>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-sm font-semibold text-green-600">Outcome</span>
-                    </div>
-                    <p className="text-xs text-gray-600 ml-4">
-                      Successfully deployed on Ethereum Sepolia with OpenSea integration and functional NFT minting
-                      capabilities.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {["Solidity", "Node.js", "JavaScript", "IPFS", "MetaMask"].map((tech) => (
-                    <Badge key={tech} variant="outline" className="text-xs bg-gray-50">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
-                    <span className="text-xs font-medium text-purple-600">Web3 Platform</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Skills Section */}
-      <section id="skills" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Technical Skills</h2>
-            <div className="w-24 h-1 bg-blue-600 mx-auto"></div>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <Code className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <CardTitle className="text-lg">Languages</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {["C", "C++", "Python", "Java", "Solidity"].map((skill) => (
-                    <Badge key={skill} variant="outline" className="text-xs">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="h-12 w-12 text-blue-600 mx-auto mb-4 flex items-center justify-center">
-                  <Code className="h-8 w-8" />
-                </div>
-                <CardTitle className="text-lg">Frameworks & Tools</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {["Flutter", "React", "Node.js", "Git", "Docker", "FastAPI"].map((skill) => (
-                    <Badge key={skill} variant="outline" className="text-xs">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="h-12 w-12 text-blue-600 mx-auto mb-4 flex items-center justify-center">
-                  <Award className="h-8 w-8" />
-                </div>
-                <CardTitle className="text-lg">Cloud & Databases</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {["SQL", "PostgreSQL", "Firebase", "MongoDB", "pgvector"].map((skill) => (
-                    <Badge key={skill} variant="outline" className="text-xs">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <GraduationCap className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <CardTitle className="text-lg">Core CS</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {["DSA", "OS", "Networks", "DBMS", "RAG"].map((skill) => (
-                    <Badge key={skill} variant="outline" className="text-xs">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* LinkedIn Post Section */}
-      <section id="linkedin" className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Latest from LinkedIn</h2>
-            <div className="w-24 h-1 bg-blue-600 mx-auto"></div>
-          </div>
-
-          <Card className="shadow-xl">
-            <CardHeader className="border-b">
-              <div className="flex items-center space-x-4">
-                <img
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pp.jpg-dnwr8MaShqCTXbagijTqQMIgoKptWV.jpeg"
-                  alt="Aditya Bharti"
-                  className="w-12 h-12 rounded-full"
-                />
-                <div>
-                  <h3 className="font-semibold text-gray-900">Aditya Bharti</h3>
-                  <p className="text-sm text-gray-600">
-                    Computer Science student | AI Systems and Blockchain enthusiast
-                  </p>
-                </div>
-              </div>
-            </CardHeader>
-
-            <CardContent className="p-6">
-              <div className={`space-y-4 ${!isPostExpanded ? "max-h-40 overflow-hidden" : ""}`}>
-                <p className="text-gray-800 leading-relaxed">
-                  🎉 Thrilled to share that I've successfully completed my first-ever internship as a Quality Assurance
-                  Tester at RingZero Networks (Thailand) Co., Ltd.! 🚀
-                </p>
-                <p className="text-gray-800 leading-relaxed">
-                  This summer has been an incredible journey of growth, learning, and hands-on experience in the tech
-                  industry. Here's what made this internship so special:
-                </p>
-                <p className="text-gray-800 leading-relaxed">
-                  🎮 <strong>Game Testing Excellence:</strong> I had the amazing opportunity to work on regression
-                  testing for Stitch (Apple's Game of the Year 2023) and Puffies (Apple's Game of the Year 2024).
-                  Testing these award-winning games across multiple Apple platforms—iPhone, iPad, Mac, and Apple TV—was
-                  both challenging and rewarding.
-                </p>
-                <p className="text-gray-800 leading-relaxed">
-                  🤖 <strong>AI Innovation:</strong> Beyond game testing, I built an AI-powered, RAG-based POS Assistant
-                  using FastAPI. This project involved vector similarity search, Star Schema modeling, and integrating
-                  RAG workflows with data pipelines (ETL/ELT) to enable natural language querying of real-time sales
-                  data.
-                </p>
-                <p className="text-gray-800 leading-relaxed">
-                  🌟 <strong>Key Takeaways:</strong> This experience taught me the importance of attention to detail,
-                  cross-platform compatibility, and the power of AI in solving real-world business problems.
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between mt-6 pt-4 border-t">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsPostExpanded(!isPostExpanded)}
-                  className="text-blue-600 hover:text-blue-800"
-                >
-                  {isPostExpanded ? (
-                    <>
-                      <Compress className="h-4 w-4 mr-2" />
-                      Show Less
-                    </>
-                  ) : (
-                    <>
-                      <Expand className="h-4 w-4 mr-2" />
-                      Read Full Post
-                    </>
-                  )}
-                </Button>
-
-                <a
-                  href="https://www.linkedin.com/posts/aadityabhartii_summerinternship-internshipexperience-firstinternship-activity-7348030202263851009-4IV1"
-                  className="text-blue-600 hover:text-blue-800 transition-colors"
-                >
-                  <ExternalLink className="h-4 w-4" />
-                </a>
-              </div>
-            </CardContent>
-
-            {/* Comments Section */}
-            {isPostExpanded && (
-              <div className="border-t bg-gray-50 p-6">
-                <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Comments
-                </h4>
-
-                <div className="space-y-6">
-                  {/* Comment 1 */}
-                  <div className="space-y-3">
-                    <div className="flex items-start space-x-3">
-                      <img
-                        src="/placeholder.svg?height=40&width=40"
-                        alt="Akhil Gupta"
-                        className="w-8 h-8 rounded-full"
-                      />
-                      <div className="flex-1">
-                        <div className="bg-white rounded-lg p-3 shadow-sm">
-                          <div className="flex items-center space-x-2 mb-1">
-                            <span className="font-semibold text-sm text-gray-900">Akhil Gupta</span>
-                            <span className="text-xs text-gray-500">• 3rd+</span>
-                          </div>
-                          <p className="text-xs text-gray-600 mb-2">Pricing Strategy and Monetization Consultant</p>
-                          <p className="text-sm text-gray-800">
-                            Wow, working on Apple's Game of the Year must've been quite the first internship experience!
-                            I'm especially impressed by your pivot to building that RAG-based POS assistant. How did
-                            your game testing skills transfer to the AI project? Seems like an interesting connection.
-                          </p>
-                        </div>
-
-                        {/* Reply */}
-                        <div className="ml-6 mt-3">
-                          <div className="flex items-start space-x-3">
-                            <img
-                              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pp.jpg-dnwr8MaShqCTXbagijTqQMIgoKptWV.jpeg"
-                              alt="Aditya Bharti"
-                              className="w-6 h-6 rounded-full"
-                            />
-                            <div className="bg-blue-50 rounded-lg p-3 shadow-sm flex-1">
-                              <div className="flex items-center space-x-2 mb-1">
-                                <span className="font-semibold text-sm text-gray-900">Aditya Bharti</span>
-                                <Badge variant="secondary" className="text-xs">
-                                  Author
-                                </Badge>
-                              </div>
-                              <p className="text-sm text-gray-800">
-                                Thanks, Akhil Gupta! Yes! Testing games like Stitch and Puffies was a fantastic way to
-                                kick off my internship. It really sharpened my attention to detail, pattern recognition,
-                                and edge-case thinking — all of which surprisingly carried over when I shifted gears to
-                                the RAG-based POS assistant.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Comment 2 */}
-                  <div className="space-y-3">
-                    <div className="flex items-start space-x-3">
-                      <img
-                        src="/placeholder.svg?height=40&width=40"
-                        alt="Anuj Tripathi"
-                        className="w-8 h-8 rounded-full"
-                      />
-                      <div className="flex-1">
-                        <div className="bg-white rounded-lg p-3 shadow-sm">
-                          <div className="flex items-center space-x-2 mb-1">
-                            <span className="font-semibold text-sm text-gray-900">Anuj Tripathi, MBA</span>
-                            <span className="text-xs text-gray-500">• 1st</span>
-                          </div>
-                          <p className="text-xs text-gray-600 mb-2">QA Department Setup Expert | ISTQB Certified</p>
-                          <p className="text-sm text-gray-800">
-                            Aditya Bharti you're such a sharp thinker! It's amazing how quickly you pick things up and
-                            how well you understand both the tech and business sides of a product. You've got a real
-                            potential there! Keep up the great work, and I'm really looking forward to working with you
-                            again soon.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </Card>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
-            <div className="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-            <p className="text-xl text-gray-600">
-              I'm always open to discussing new opportunities, collaborations, and interesting projects.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            <div className="space-y-8">
-              <div className="flex items-center space-x-4">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <Mail className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Email</h3>
-                  <a href="mailto:work.adityabharti@gmail.com" className="text-blue-600 hover:text-blue-800">
-                    work.adityabharti@gmail.com
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <Phone className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Phone</h3>
-                  <a href="tel:+918840538333" className="text-blue-600 hover:text-blue-800">
-                    +91 8840538333
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <MapPin className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Location</h3>
-                  <p className="text-gray-600">Chennai, India</p>
-                </div>
-              </div>
-
-              <div className="flex space-x-4 pt-6">
+            {/* Social Links */}
+            <AnimatedSection delay={800} animation="fade">
+              <div className="flex items-center gap-4 flex-wrap">
                 <a
                   href="https://github.com/dormeneur"
-                  className="bg-gray-900 text-white p-3 rounded-full hover:bg-gray-800 transition-colors"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-full glass hover:bg-primary/10 hover:text-primary transition-all hover:scale-110"
+                  aria-label="GitHub"
                 >
                   <Github className="h-5 w-5" />
                 </a>
                 <a
                   href="https://linkedin.com/in/aadityabhartii"
-                  className="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-colors"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-full glass hover:bg-primary/10 hover:text-primary transition-all hover:scale-110"
+                  aria-label="LinkedIn"
                 >
                   <Linkedin className="h-5 w-5" />
                 </a>
-                <a
-                  href="https://leetcode.com/u/dormeneur/"
-                  className="bg-orange-500 text-white p-3 rounded-full hover:bg-orange-600 transition-colors"
-                >
-                  <Code className="h-5 w-5" />
-                </a>
+                <EmailButton />
               </div>
+            </AnimatedSection>
+          </div>
+        </div>
 
-              <div className="pt-6">
-                <Button
-                  className="w-full bg-green-600 hover:bg-green-700 text-white"
-                  onClick={() => {
-                    window.open(
-                      "https://drive.google.com/uc?export=download&id=1Bp3ib1nLZPUzmz3pGZh0Vhoju9nJ47hi",
-                      "_blank",
-                    )
-                  }}
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <ChevronDown className="h-8 w-8 text-muted-foreground" />
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {stats.map((stat, index) => (
+                <div
+                  key={stat.label}
+                  className="glass-card rounded-2xl p-6 text-center interactive-card"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  Download Resume
-                </Button>
-              </div>
+                  <stat.icon className="h-8 w-8 text-primary mx-auto mb-3" />
+                  <div className="text-3xl md:text-4xl font-bold gradient-text mb-1">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                </div>
+              ))}
             </div>
+          </AnimatedSection>
+        </div>
+      </section>
 
-            <Card className="shadow-lg">
-              <CardHeader>
-                <CardTitle>Send me a message</CardTitle>
-                <CardDescription>I'll get back to you as soon as possible!</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form className="space-y-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Your name"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="your.email@example.com"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      rows={4}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Your message..."
-                    ></textarea>
-                  </div>
-                  <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
-                    Send Message
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+      {/* Quick Intro Section */}
+      <section className="py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <AnimatedSection animation="slide-right">
+              <div className="space-y-6">
+                <h2 className="text-3xl md:text-4xl font-bold">
+                  Building the <span className="gradient-text">Future</span> with Code
+                </h2>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  I'm a Thai national raised in India, currently in my third year at VIT Chennai.
+                  I believe the future is all about automation: systems that adapt, simplify, and scale intelligently.
+                </p>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  From AI-powered assistants to cross-platform mobile apps and blockchain solutions,
+                  I bring a creative, thoughtful approach to every project.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {["AI/ML", "Mobile Dev", "Blockchain", "Full Stack"].map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-4 py-2 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+                <div className="pt-4">
+                  <Link href="/about">
+                    <Button variant="outline" className="gap-2 group">
+                      Learn More About Me
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection animation="scale" delay={200}>
+              <div className="relative">
+                {/* Decorative background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-2xl" />
+
+                {/* Interest cards */}
+                <div className="relative grid grid-cols-2 gap-4">
+                  {[
+                    { icon: Cpu, title: "AI & Automation", desc: "Building intelligent systems" },
+                    { icon: Code, title: "Mobile Apps", desc: "Flutter & cross-platform" },
+                    { icon: Zap, title: "Blockchain", desc: "Web3 & smart contracts" },
+                    { icon: Sparkles, title: "Startups", desc: "Tech-driven innovation" },
+                  ].map((item, index) => (
+                    <div
+                      key={item.title}
+                      className="glass-card rounded-2xl p-5 interactive-card"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <item.icon className="h-8 w-8 text-primary mb-3" />
+                      <h3 className="font-semibold mb-1">{item.title}</h3>
+                      <p className="text-sm text-muted-foreground">{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h3 className="text-2xl font-bold mb-4">Aditya Bharti</h3>
-            <p className="text-gray-400 mb-6">Building the future with AI, Blockchain, and purposeful technology.</p>
-            <div className="flex justify-center space-x-6 mb-8">
-              <a href="https://github.com/dormeneur" className="text-gray-400 hover:text-white transition-colors">
-                <Github className="h-6 w-6" />
-              </a>
-              <a
-                href="https://linkedin.com/in/aadityabhartii"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <Linkedin className="h-6 w-6" />
-              </a>
-              <a href="mailto:work.adityabharti@gmail.com" className="text-gray-400 hover:text-white transition-colors">
-                <Mail className="h-6 w-6" />
-              </a>
+      {/* CTA Section */}
+      <section className="py-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <AnimatedSection>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Ready to <span className="gradient-text">Work Together</span>?
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              I'm actively seeking internships, research opportunities, and exciting project collaborations.
+              Let's build something amazing together.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link href="/hire-me">
+                <Button size="lg" className="gap-2 bg-primary hover:bg-primary/90">
+                  <Sparkles className="h-4 w-4" />
+                  Hire Me
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button size="lg" variant="outline" className="gap-2">
+                  Get in Touch
+                </Button>
+              </Link>
             </div>
-            <div className="border-t border-gray-800 pt-8">
-              <p className="text-gray-400 text-sm">
-                © 2025 Aditya Bharti. All rights reserved. Built with Next.js and Tailwind CSS.
-              </p>
-            </div>
-          </div>
+          </AnimatedSection>
         </div>
-      </footer>
+      </section>
     </div>
   )
 }
