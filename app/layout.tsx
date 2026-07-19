@@ -2,12 +2,15 @@ import type { Metadata } from 'next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
-import { ProgressTracker } from '@/components/progress-tracker'
-import { ScrollToTop } from '@/components/scroll-to-top'
+import { SITE_URL } from '@/lib/constants'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Aditya Bharti | Software Developer',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Aditya Bharti | Software Developer',
+    template: '%s',
+  },
   description: 'Computer Science student specializing in AI Systems, Mobile Development, and Blockchain. Open to internships and collaborations.',
   keywords: ['Aditya Bharti', 'Software Developer', 'Flutter', 'AI', 'Blockchain', 'Portfolio'],
   authors: [{ name: 'Aditya Bharti' }],
@@ -15,6 +18,7 @@ export const metadata: Metadata = {
     title: 'Aditya Bharti | Software Developer',
     description: 'Computer Science student specializing in AI Systems, Mobile Development, and Blockchain.',
     type: 'website',
+    images: ['/hero.png'],
   },
 }
 
@@ -37,8 +41,6 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
-          <ProgressTracker />
-          <ScrollToTop />
         </ThemeProvider>
       </body>
     </html>

@@ -1,282 +1,246 @@
-"use client"
-
-import { useState } from "react"
+import type { Metadata } from "next"
 import Image from "next/image"
-import { AnimatedSection } from "@/components/animated-section"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Github, ExternalLink, ChevronDown, ChevronUp } from "lucide-react"
+import { PageShell, PageHeader, Section } from "@/components/page-shell"
+import { GITHUB_URL } from "@/lib/constants"
 
-const projects = [
-    {
-        title: "V Help",
-        tagline: "College Services & Student Utility App",
-        status: "Ongoing",
-        statusColor: "bg-green-500",
-        image: "https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/vhelp.png",
-        github: "https://github.com/dormeneur/VHELP",
-        description:
-            "A unified college services app for academics, food, and repairs, serving 1100+ daily active users at VIT Chennai.",
-        problem:
-            "Students faced fragmented digital services across campus, leading to inefficient processes for food ordering, hostel management, and academic tasks.",
-        approach:
-            "Developed a unified Flutter application with Firebase backend, implementing real-time synchronization, secure authentication, and scalable cloud architecture.",
-        outcome:
-            "Successfully onboarded 1100+ active users, reduced service request processing time by 75%, and improved student satisfaction.",
-        tech: ["Flutter", "Firebase", "Real-time DB", "Push Notifications", "Cloud Functions"],
-        highlight: "Campus-Scale Platform",
-        highlightColor: "text-green-500",
-    },
-    {
-        title: "Queez",
-        tagline: "AI-Powered Learning & Live Quiz Platform",
-        status: "Completed",
-        statusColor: "bg-yellow-500",
-        image: "/queez.png",
-        github: "https://github.com/ChauhanKrish4763/Queez",
-        description:
-            "A real-time, cross-platform learning app with WebSocket-powered live multiplayer leaderboards and AI-generated study content. Contributed to this project as a team member.",
-        problem:
-            "Traditional learning apps lacked real-time engagement and personalized AI-driven content generation.",
-        approach:
-            "Built a Flutter app with WebSocket integration for live multiplayer quizzes, AI-generated flashcards, and adaptive learning paths.",
-        outcome:
-            "Won 2nd place at Hack-N-Droid 2025 hackathon, built within 24 hours.",
-        tech: ["Flutter", "WebSockets", "AI/ML", "Firebase"],
-        highlight: "🏆 Hackathon Runner-Up",
-        highlightColor: "text-yellow-500",
-    },
-    {
-        title: "JunkWunk",
-        tagline: "Rag Picker & Seller Marketplace",
-        status: "Completed",
-        statusColor: "bg-blue-500",
-        image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/junkwunk.jpg-rW6FCY4ZVQRZLvEqOk5uqatwrNv8px.jpeg",
-        github: "https://github.com/dormeneur/JUNKWUNK",
-        description:
-            "An innovative marketplace bridging rag pickers and sellers, enabling efficient and transparent trading of recyclable, non-recyclable, and donation materials.",
-        problem:
-            "Rag pickers lacked a structured platform to connect with sellers, leading to inefficient sourcing and unfair pricing in the recycling ecosystem.",
-        approach:
-            "Built a cross-platform Flutter app with AWS backend and Firebase Firestore for real-time data. Features secure Google auth, seamless buyer-seller interaction, and upcoming AI-powered image tagging.",
-        outcome:
-            "Deployed across Android, iOS, Web, Windows, and MacOS. Created an efficient, transparent marketplace benefiting both rag pickers and material sellers.",
-        tech: ["Flutter", "AWS", "Firebase", "Google Auth", "Cross-Platform"],
-        highlight: "AWS-Powered Platform",
-        highlightColor: "text-blue-500",
-    },
-    {
-        title: "Cyber Gallery & NFT",
-        tagline: "Decentralized Art Gallery on Ethereum",
-        status: "Completed",
-        statusColor: "bg-purple-500",
-        image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/artgallery-tQ83hZzW8RJD87WSbUVpx8ouURkFYd.png",
-        live: "https://art-gallery-iota-one.vercel.app/",
-        description:
-            "A full-stack decentralized Web3 application on Ethereum Sepolia for minting digital art as ERC-721 NFTs.",
-        problem:
-            "Artists needed a decentralized platform to mint and showcase digital art as NFTs with seamless blockchain integration.",
-        approach:
-            "Built with Solidity smart contracts, IPFS storage via Pinata, MetaMask integration, and cyberpunk-themed frontend.",
-        outcome:
-            "Successfully deployed on Ethereum Sepolia with OpenSea integration and functional NFT minting capabilities.",
-        tech: ["Solidity", "Node.js", "JavaScript", "IPFS", "MetaMask", "Ethereum"],
-        highlight: "Web3 Platform",
-        highlightColor: "text-purple-500",
-    },
-    {
-        title: "Deepfake Detection",
-        tagline: "Using Gait Analysis & Machine Learning",
-        status: "Research",
-        statusColor: "bg-orange-500",
-        description:
-            "A machine learning pipeline for deepfake detection using biometric gait patterns instead of face-based cues.",
-        problem:
-            "Existing deepfake detection relied heavily on facial features which can be easily manipulated.",
-        approach:
-            "Developed temporal gait features capturing walking rhythm and joint motion patterns using CNN-based computer vision.",
-        outcome:
-            "Achieved improved robustness against manipulated videos by focusing on full-body movement patterns.",
-        tech: ["Python", "PyTorch", "OpenCV", "CNN", "Computer Vision"],
-        highlight: "AI Research Project",
-        highlightColor: "text-orange-500",
-    },
-]
-
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
-    const [isExpanded, setIsExpanded] = useState(false)
-
-    return (
-        <AnimatedSection animation="slide-up" delay={index * 100}>
-            <Card className="glass-card border-0 overflow-hidden group interactive-card">
-                <CardContent className="p-0">
-                    {/* Image Section */}
-                    {project.image && (
-                        <div className="relative h-48 overflow-hidden">
-                            <Image
-                                src={project.image}
-                                alt={project.title}
-                                fill
-                                className="object-cover transition-transform duration-500 group-hover:scale-110"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-
-                            {/* Status Badge */}
-                            <Badge className={`absolute top-4 right-4 ${project.statusColor} text-white border-0`}>
-                                {project.status}
-                            </Badge>
-
-                            {/* Links */}
-                            <div className="absolute top-4 left-4 flex gap-2">
-                                {project.github && (
-                                    <a
-                                        href={project.github}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="p-2 rounded-full glass hover:bg-primary/20 transition-colors"
-                                    >
-                                        <Github className="h-4 w-4" />
-                                    </a>
-                                )}
-                                {project.live && (
-                                    <a
-                                        href={project.live}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="p-2 rounded-full glass hover:bg-primary/20 transition-colors"
-                                    >
-                                        <ExternalLink className="h-4 w-4" />
-                                    </a>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Content */}
-                    <div className="p-6">
-                        {/* Title */}
-                        <h3 className="text-xl font-bold mb-1">{project.title}</h3>
-                        <p className="text-sm text-primary font-medium mb-3">{project.tagline}</p>
-
-                        {/* Description */}
-                        <p className="text-muted-foreground text-sm mb-4">{project.description}</p>
-
-                        {/* Expandable Details */}
-                        <div
-                            className={`overflow-hidden transition-all duration-300 ${isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                                }`}
-                        >
-                            <div className="space-y-4 pt-4 border-t border-border/50">
-                                {/* Problem */}
-                                <div>
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <div className="w-2 h-2 rounded-full bg-red-500" />
-                                        <span className="text-sm font-semibold text-red-500">Problem</span>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground pl-4">{project.problem}</p>
-                                </div>
-
-                                {/* Approach */}
-                                <div>
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <div className="w-2 h-2 rounded-full bg-blue-500" />
-                                        <span className="text-sm font-semibold text-blue-500">Approach</span>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground pl-4">{project.approach}</p>
-                                </div>
-
-                                {/* Outcome */}
-                                <div>
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <div className="w-2 h-2 rounded-full bg-green-500" />
-                                        <span className="text-sm font-semibold text-green-500">Outcome</span>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground pl-4">{project.outcome}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Expand Button */}
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setIsExpanded(!isExpanded)}
-                            className="w-full mt-4 gap-2"
-                        >
-                            {isExpanded ? (
-                                <>
-                                    <ChevronUp className="h-4 w-4" />
-                                    Show Less
-                                </>
-                            ) : (
-                                <>
-                                    <ChevronDown className="h-4 w-4" />
-                                    Show Details
-                                </>
-                            )}
-                        </Button>
-
-                        {/* Tech Stack */}
-                        <div className="flex flex-wrap gap-2 mt-4">
-                            {project.tech.map((tech) => (
-                                <Badge key={tech} variant="outline" className="text-xs">
-                                    {tech}
-                                </Badge>
-                            ))}
-                        </div>
-
-                        {/* Highlight */}
-                        <div className="mt-4 pt-4 border-t border-border/50">
-                            <div className="flex items-center gap-2">
-                                <div className={`w-2 h-2 rounded-full ${project.statusColor}`} />
-                                <span className={`text-xs font-medium ${project.highlightColor}`}>
-                                    {project.highlight}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-        </AnimatedSection>
-    )
+export const metadata: Metadata = {
+  title: "Projects | Aditya Bharti",
+  description:
+    "Projects across enterprise software, mobile, AI, and blockchain — JMS jewelry ERP, V Help, Queez, Rooms.io, JARVIS, and QKD × GNN research.",
 }
 
+type Project = {
+  title: string
+  tagline: string
+  status: string
+  image?: string
+  github?: string
+  live?: string
+  description: string
+  problem: string
+  approach: string
+  outcome: string
+  tech: string[]
+}
+
+const projects: Project[] = [
+  {
+    title: "jms",
+    tagline: "jewelry manufacturing erp + crm",
+    status: "ongoing",
+    description:
+      "An ERP + CRM enterprise system for Sparkling Gems Co. Ltd. (Bangkok) covering the full jewelry manufacturing pipeline — inventory, orders, production, and customers.",
+    problem:
+      "The company ran manufacturing on a legacy system with no formal specs, making orders, production, and inventory hard to track or audit.",
+    approach:
+      "Reverse-engineered the legacy business logic into formal specs, then rebuilt every module on FastAPI + PostgreSQL with JWT auth, granular RBAC, and a financial-grade audit trail, plus a Flutter multi-device frontend.",
+    outcome:
+      "Dockerized one-command deployment, AI voice-driven invoice/quotation creation, and a salesman mobile app with QR scanning and image-recognition entry.",
+    tech: ["fastapi", "postgresql", "flutter", "docker"],
+  },
+  {
+    title: "v help",
+    tagline: "college services & student utility app",
+    status: "ongoing",
+    image: "https://nnhjafkmeqnvhfy5.public.blob.vercel-storage.com/vhelp.png",
+    github: "https://github.com/dormeneur/VHELP",
+    description:
+      "A unified college services app for academics, food, and repairs, serving 1260+ daily active users at VIT Chennai.",
+    problem:
+      "Students faced fragmented digital services across campus — food ordering, hostel management, and academic tasks all lived in different places.",
+    approach:
+      "A single Flutter app on a Firebase backend with real-time sync, secure auth, and a scalable cloud architecture.",
+    outcome: "Onboarded 1260+ active users and cut service-request processing time by ~75%.",
+    tech: ["flutter", "firebase", "real-time db", "cloud functions"],
+  },
+  {
+    title: "queez",
+    tagline: "ai-powered learning & live quiz platform",
+    status: "runner-up 🏆",
+    image: "/queez.png",
+    github: "https://github.com/ChauhanKrish4763/Queez",
+    description:
+      "A real-time, cross-platform learning app with WebSocket-powered live multiplayer leaderboards and AI-generated study content. Built as a team.",
+    problem: "Traditional learning apps lacked real-time engagement and AI-driven content.",
+    approach:
+      "A Flutter app with WebSocket live quizzes, AI-generated flashcards, and adaptive learning paths.",
+    outcome: "2nd place at Hack-N-Droid 2025, built in 24 hours.",
+    tech: ["flutter", "websockets", "ai/ml", "firebase"],
+  },
+  {
+    title: "rooms.io",
+    tagline: "hotel booking & management app",
+    status: "completed",
+    description:
+      "A mobile app that lets hotels manage bookings, room availability, and guests from a single place.",
+    problem:
+      "Smaller hotels juggle bookings and room availability across spreadsheets and phone calls.",
+    approach:
+      "A cross-platform Flutter app with real-time booking, room management, and guest tracking on a Firebase backend.",
+    outcome: "One app for hotels to manage availability and reservations in real time.",
+    tech: ["flutter", "firebase"],
+  },
+  {
+    title: "junkwunk",
+    tagline: "rag picker & seller marketplace",
+    status: "completed",
+    image:
+      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/junkwunk.jpg-rW6FCY4ZVQRZLvEqOk5uqatwrNv8px.jpeg",
+    github: "https://github.com/dormeneur/JUNKWUNK",
+    description:
+      "A marketplace bridging rag pickers and sellers for transparent trading of recyclable, non-recyclable, and donation materials.",
+    problem:
+      "Rag pickers had no structured way to connect with sellers, leading to inefficient sourcing and unfair pricing.",
+    approach:
+      "A cross-platform Flutter app on AWS + Firebase Firestore with Google auth and real-time buyer-seller interaction.",
+    outcome: "Shipped across Android, iOS, Web, Windows, and macOS.",
+    tech: ["flutter", "aws", "firebase", "google auth"],
+  },
+  {
+    title: "jarvis",
+    tagline: "offline ai second brain, synced to your phone",
+    status: "ongoing",
+    description:
+      "A local, offline-first AI ‘second brain’ that stores my personal knowledge and syncs git-style between laptop and phone — all processing stays on my own hardware.",
+    problem:
+      "Cloud AI assistants mean handing personal data to third parties and losing access offline.",
+    approach:
+      "Runs inference locally through Ollama on my laptop, keeps a git-like store synced to my phone, and uses Tailscale to open a secure private connection between the two.",
+    outcome:
+      "A private assistant that keeps my data on my own machines while staying reachable from my phone.",
+    tech: ["ollama", "tailscale", "python"],
+  },
+  {
+    title: "cyber gallery & nft",
+    tagline: "decentralized art gallery on ethereum",
+    status: "completed",
+    image:
+      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/artgallery-tQ83hZzW8RJD87WSbUVpx8ouURkFYd.png",
+    live: "https://art-gallery-iota-one.vercel.app/",
+    description: "A full-stack Web3 app on Ethereum Sepolia for minting digital art as ERC-721 NFTs.",
+    problem: "Artists needed a decentralized way to mint and showcase digital art as NFTs.",
+    approach:
+      "Solidity smart contracts, IPFS storage via Pinata, MetaMask integration, and a cyberpunk frontend.",
+    outcome: "Deployed on Sepolia with OpenSea integration and working NFT minting.",
+    tech: ["solidity", "node.js", "ipfs", "metamask"],
+  },
+  {
+    title: "deepfake detection",
+    tagline: "gait analysis & machine learning",
+    status: "research",
+    description:
+      "An ML pipeline for deepfake detection using biometric gait patterns instead of face-based cues.",
+    problem: "Existing detection leaned on facial features, which are easy to manipulate.",
+    approach:
+      "Temporal gait features capturing walking rhythm and joint motion via CNN-based computer vision.",
+    outcome: "More robust against manipulated video by focusing on full-body movement.",
+    tech: ["python", "pytorch", "opencv", "cnn"],
+  },
+  {
+    title: "qkd × gnn",
+    tagline: "optimizing quantum key distribution with graph neural networks",
+    status: "research",
+    description:
+      "A method and system for optimizing Quantum Key Distribution (QKD) networks using Graph Neural Networks.",
+    problem: "QKD networks are hard to route and scale efficiently as topology and key demand shift.",
+    approach:
+      "Models the QKD network as a graph and trains a Graph Neural Network to optimize key-distribution routing and resource allocation.",
+    outcome: "Topology-aware distribution strategies that improve overall network efficiency.",
+    tech: ["python", "pytorch", "gnn", "quantum"],
+  },
+]
+
 export default function ProjectsPage() {
-    return (
-        <div className="min-h-screen py-12">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Header */}
-                <AnimatedSection className="text-center mb-16">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                        Featured <span className="gradient-text">Projects</span>
-                    </h1>
-                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                        A selection of projects showcasing my skills in mobile development, AI, and blockchain.
-                    </p>
-                </AnimatedSection>
+  return (
+    <PageShell>
+      <PageHeader
+        title="projects"
+        accent="built to be used, not just demoed."
+        subtitle="mobile · ai · blockchain"
+      />
 
-                {/* Projects Grid */}
-                <div className="grid md:grid-cols-2 gap-8">
-                    {projects.map((project, index) => (
-                        <ProjectCard key={project.title} project={project} index={index} />
-                    ))}
+      <div className="grid sm:grid-cols-2 gap-5 pb-4">
+        {projects.map((p, i) => {
+          const link = p.github ?? p.live
+          return (
+            <article key={p.title} className="tile tile-hover group overflow-hidden flex flex-col">
+              {p.image && (
+                <div className="relative h-44 overflow-hidden border-b border-border/40">
+                  <Image
+                    src={p.image}
+                    alt={p.title}
+                    fill
+                    priority={i < 2}
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute top-3 right-3 rounded-full bg-background/80 backdrop-blur px-3 py-1 font-mono text-xs text-foreground border border-border/60">
+                    {p.status}
+                  </span>
                 </div>
-
-                {/* More on GitHub */}
-                <AnimatedSection className="mt-16 text-center" delay={500}>
+              )}
+              <div className="p-5 flex flex-col gap-3 flex-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  {link ? (
                     <a
-                        href="https://github.com/dormeneur"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-display font-semibold text-lg text-foreground hover:text-primary transition-colors"
                     >
-                        <Button size="lg" variant="outline" className="gap-2 glass">
-                            <Github className="h-5 w-5" />
-                            View More on GitHub
-                        </Button>
+                      {p.title} <span className="text-primary/60">↗</span>
                     </a>
-                </AnimatedSection>
-            </div>
-        </div>
-    )
+                  ) : (
+                    <span className="font-display font-semibold text-lg text-foreground">
+                      {p.title}
+                    </span>
+                  )}
+                  {!p.image && (
+                    <span className="font-mono text-xs text-muted-foreground/70">{p.status}</span>
+                  )}
+                </div>
+                <p className="font-serif italic text-primary/80">{p.tagline}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{p.description}</p>
+
+                <details className="group/details">
+                  <summary className="font-mono text-xs text-muted-foreground/70 hover:text-foreground cursor-pointer select-none list-none marker:content-none">
+                    <span className="group-open/details:hidden">+ the full story</span>
+                    <span className="hidden group-open/details:inline">– less</span>
+                  </summary>
+                  <dl className="mt-3 space-y-2 text-sm">
+                    {(["problem", "approach", "outcome"] as const).map((k) => (
+                      <div key={k} className="flex gap-3">
+                        <dt className="font-mono text-xs text-primary/70 w-20 shrink-0 pt-0.5">
+                          {k}
+                        </dt>
+                        <dd className="text-muted-foreground leading-relaxed">{p[k]}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </details>
+
+                <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
+                  {p.tech.map((t) => (
+                    <span key={t} className="chip">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </article>
+          )
+        })}
+      </div>
+
+      <Section>
+        <a
+          href={GITHUB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="link-underline font-mono text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          more on github →
+        </a>
+      </Section>
+    </PageShell>
+  )
 }
