@@ -74,9 +74,9 @@ const languages = [
 ]
 
 const quickFacts = [
-  { k: "🎓", v: "vit chennai · b.tech cse, 2023–2027" },
-  { k: "📍", v: "chennai, india · open to relocation" },
-  { k: "🇹🇭", v: "thai national (oci) · can work in india & thailand" },
+  { k: "education", v: "b.tech cse, vit chennai · 2023–2027" },
+  { k: "based in", v: "chennai, india · open to relocation" },
+  { k: "work rights", v: "india & thailand · thai national (oci)" },
 ]
 
 export default function AboutPage() {
@@ -100,22 +100,25 @@ export default function AboutPage() {
         </div>
         <div className="space-y-4 text-muted-foreground leading-relaxed">
           <p>
-            born in thailand, moved to india for school. i&apos;m a third-year cs student at vit
-            chennai, mostly interested in building things that hold up under real use.
+            born in thailand and educated in india, i&apos;m a third-year computer science
+            undergraduate at vit chennai. my work spans mobile applications, backend systems, and
+            applied ai — engineered for production, not just demos.
           </p>
           <p>
-            i&apos;m a thai national with oci status, so i&apos;m authorized to work in both india
-            and thailand. i like practical, scalable software and a lot of &quot;why did that
-            break&quot;.
+            i&apos;ve shipped software used daily by over a thousand people, built enterprise
+            systems solo, and contributed to research in computer vision and quantum networking.
+            i care about the details that make software dependable.
           </p>
-          <ul className="space-y-2 pt-2">
+          <dl className="pt-2 border-t border-border/40">
             {quickFacts.map((f) => (
-              <li key={f.v} className="flex gap-3 text-sm">
-                <span aria-hidden>{f.k}</span>
-                <span>{f.v}</span>
-              </li>
+              <div key={f.k} className="flex gap-4 py-2 border-b border-border/40 text-sm">
+                <dt className="font-mono text-xs uppercase tracking-[0.15em] text-muted-foreground/60 w-28 shrink-0 pt-0.5">
+                  {f.k}
+                </dt>
+                <dd className="text-foreground/90">{f.v}</dd>
+              </div>
             ))}
-          </ul>
+          </dl>
         </div>
       </section>
 
@@ -132,7 +135,7 @@ export default function AboutPage() {
       </Section>
 
       <Section label="skills" num="02" id="skills">
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {skillGroups.map((g) => (
             <div key={g.label} className="tile tile-hover p-5">
               <SectionLabel num={g.num}>{g.label}</SectionLabel>

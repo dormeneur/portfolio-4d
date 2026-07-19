@@ -39,7 +39,7 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
-      <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4 flex items-center justify-between gap-4">
         <Link
           href="/"
           className="font-display font-bold text-foreground hover:text-primary transition-colors shrink-0"

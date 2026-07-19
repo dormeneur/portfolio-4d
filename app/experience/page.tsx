@@ -105,7 +105,7 @@ export default function ExperiencePage() {
                   </ul>
                 </div>
                 {exp.image && (
-                  <div className="relative h-44 sm:h-auto sm:w-52 shrink-0 border-b sm:border-b-0 sm:border-l border-border/60">
+                  <div className="relative h-52 sm:h-auto sm:w-72 lg:w-96 shrink-0 border-b sm:border-b-0 sm:border-l border-border/60">
                     <Image
                       src={exp.image}
                       alt={exp.company}

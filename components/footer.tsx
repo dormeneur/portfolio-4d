@@ -10,7 +10,7 @@ const links = [
 export function Footer() {
   return (
     <footer className="border-t border-border/40 mt-auto">
-      <div className="max-w-3xl mx-auto px-6 pt-14 pb-8">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 pt-14 pb-8">
         <p className="font-serif italic text-3xl sm:text-4xl text-foreground">
           have an idea?{" "}
           <Link href="/contact" className="link-underline text-primary">

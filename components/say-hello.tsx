@@ -27,7 +27,7 @@ export function SayHello() {
 
   if (status === "sent") {
     return (
-      <div className="max-w-xl py-6">
+      <div className="max-w-3xl py-6">
         <p className="font-serif italic text-2xl text-foreground">
           message sent<span className="text-primary">.</span>
         </p>
@@ -37,7 +37,7 @@ export function SayHello() {
   }
 
   return (
-    <form onSubmit={send} className="max-w-xl">
+    <form onSubmit={send} className="max-w-3xl">
       <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">
         say hello<span className="text-primary">.</span>
       </h2>

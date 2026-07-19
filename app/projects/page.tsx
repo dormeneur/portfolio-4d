@@ -58,7 +58,7 @@ const projects: Project[] = [
     tagline: "ai-powered learning & live quiz platform",
     status: "runner-up 🏆",
     image: "/queez.png",
-    github: "https://github.com/ChauhanKrish4763/Queez",
+    github: "https://github.com/dormeneur/Queez",
     description:
       "A real-time, cross-platform learning app with WebSocket-powered live multiplayer leaderboards and AI-generated study content. Built as a team.",
     problem: "Traditional learning apps lacked real-time engagement and AI-driven content.",
@@ -100,6 +100,7 @@ const projects: Project[] = [
     title: "jarvis",
     tagline: "offline ai second brain, synced to your phone",
     status: "ongoing",
+    github: "https://github.com/dormeneur/JARVIS",
     description:
       "A local, offline-first AI ‘second brain’ that stores my personal knowledge and syncs git-style between laptop and phone — all processing stays on my own hardware.",
     problem:
@@ -116,6 +117,7 @@ const projects: Project[] = [
     status: "completed",
     image:
       "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/artgallery-tQ83hZzW8RJD87WSbUVpx8ouURkFYd.png",
+    github: "https://github.com/dormeneur/ART-GALLERY",
     live: "https://art-gallery-iota-one.vercel.app/",
     description: "A full-stack Web3 app on Ethereum Sepolia for minting digital art as ERC-721 NFTs.",
     problem: "Artists needed a decentralized way to mint and showcase digital art as NFTs.",
@@ -128,6 +130,7 @@ const projects: Project[] = [
     title: "deepfake detection",
     tagline: "gait analysis & machine learning",
     status: "research",
+    github: "https://github.com/dormeneur/DeepFake-Detection-Gait-Analysis",
     description:
       "An ML pipeline for deepfake detection using biometric gait patterns instead of face-based cues.",
     problem: "Existing detection leaned on facial features, which are easy to manipulate.",
@@ -140,6 +143,7 @@ const projects: Project[] = [
     title: "qkd × gnn",
     tagline: "optimizing quantum key distribution with graph neural networks",
     status: "research",
+    github: "https://github.com/dormeneur/QKD_Optimisation_GNN_fork",
     description:
       "A method and system for optimizing Quantum Key Distribution (QKD) networks using Graph Neural Networks.",
     problem: "QKD networks are hard to route and scale efficiently as topology and key demand shift.",
@@ -159,7 +163,7 @@ export default function ProjectsPage() {
         subtitle="mobile · ai · blockchain"
       />
 
-      <div className="grid sm:grid-cols-2 gap-5 pb-4">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-4">
         {projects.map((p, i) => {
           const link = p.github ?? p.live
           return (

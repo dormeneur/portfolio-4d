@@ -45,10 +45,28 @@ export default function ContactPage() {
             </a>
           ))}
         </div>
-        <p className="mt-4 font-mono text-xs text-muted-foreground/60">
-          {LOCATIONS.map((l) => `${l.flag} ${l.city} · ${l.phone}`).join("   ·   ")}
-          {"   ·   🌍 remote-friendly"}
-        </p>
+        <div className="mt-6 grid sm:grid-cols-3 gap-4 max-w-4xl">
+          {LOCATIONS.map((loc) => (
+            <div key={loc.code} className="tile p-4 flex items-center gap-3">
+              <span className="text-2xl" aria-hidden>
+                {loc.flag}
+              </span>
+              <div>
+                <p className="text-sm text-foreground">{loc.city}</p>
+                <p className="font-mono text-xs text-muted-foreground/70">{loc.phone}</p>
+              </div>
+            </div>
+          ))}
+          <div className="tile p-4 flex items-center gap-3">
+            <span className="text-2xl" aria-hidden>
+              🌍
+            </span>
+            <div>
+              <p className="text-sm text-foreground">remote</p>
+              <p className="font-mono text-xs text-muted-foreground/70">works from anywhere</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <Section label="get in touch" num="01">

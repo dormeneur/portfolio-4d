@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 const stats = [
   { value: "1260+", label: "daily app users" },
-  { value: "4+", label: "major projects" },
+  { value: "6+", label: "major projects" },
   { value: "2nd", label: "hackathon place" },
   { value: "8.61", label: "cgpa" },
 ]
@@ -25,16 +25,28 @@ const work = [
     href: "https://github.com/dormeneur/VHELP",
   },
   {
+    name: "jms",
+    note: "jewelry manufacturing erp + crm for sparkling gems co., bangkok",
+    tech: ["fastapi", "postgresql", "flutter"],
+    href: "/projects",
+  },
+  {
     name: "queez",
     note: "ai quiz platform · hack-n-droid 2025 runner-up, built in 24h",
     tech: ["flutter", "websockets", "ai"],
-    href: "https://github.com/ChauhanKrish4763/Queez",
+    href: "https://github.com/dormeneur/Queez",
   },
   {
     name: "junkwunk",
     note: "recycling marketplace connecting rag pickers and sellers",
     tech: ["flutter", "aws"],
     href: "https://github.com/dormeneur/JUNKWUNK",
+  },
+  {
+    name: "jarvis",
+    note: "offline ai second brain, git-style synced laptop ↔ phone",
+    tech: ["ollama", "tailscale"],
+    href: "https://github.com/dormeneur/JARVIS",
   },
   {
     name: "cyber gallery",
@@ -56,31 +68,26 @@ export default function HomePage() {
       <section className="relative pt-24 pb-16">
         <div className="absolute inset-x-0 top-0 h-80 bg-dots -z-10" aria-hidden />
 
-        <div className="inline-flex items-center gap-2 rounded-full border border-border/60 px-3 py-1.5 mb-8 font-mono text-xs text-muted-foreground">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-          </span>
-          open for internships & collaborations
-        </div>
-
         <ScrambleText
           as="h1"
           text="Aditya Bharti"
           className="block font-display text-5xl sm:text-7xl font-bold tracking-tight cursor-default"
         />
         <p className="mt-4 font-serif italic text-2xl sm:text-3xl text-primary/90">
-          i build things people actually use.
+          software that outlives the demo.
         </p>
 
-        <div className="mt-8 max-w-xl space-y-4 text-muted-foreground leading-relaxed">
+        <div className="mt-8 max-w-2xl space-y-4 text-muted-foreground leading-relaxed">
           <p>
-            cs undergrad at vit chennai — mostly flutter and firebase, with some ai and blockchain
-            on the side. right now i&apos;m building{" "}
-            <span className="text-foreground font-medium">v help</span>, a campus app used by 1260+
-            students a day.
+            third-year cs undergrad at vit chennai. i mostly build mobile apps and backends — one
+            of them, <span className="text-foreground font-medium">v help</span>, quietly became
+            part of 1260+ students&apos; daily routine, which still catches me off guard.
           </p>
-          <p>when i&apos;m not shipping, i&apos;m usually breaking something and figuring out why.</p>
+          <p>
+            lately: rebuilding a jewelry factory&apos;s erp from scratch in bangkok, and teaching an
+            offline ai to be my second brain. the rest of the time i&apos;m probably taking
+            something apart to see why it worked.
+          </p>
         </div>
 
         <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-sm">
@@ -119,12 +126,12 @@ export default function HomePage() {
 
       {/* selected work */}
       <Section label="selected work" num="01">
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {work.map((p) => (
             <a
               key={p.name}
               href={p.href}
-              target="_blank"
+              target={p.href.startsWith("http") ? "_blank" : undefined}
               rel="noopener noreferrer"
               className="tile tile-hover group p-5 flex flex-col gap-3"
             >

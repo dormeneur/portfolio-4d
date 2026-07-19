@@ -3,7 +3,7 @@ import { ScrambleText } from "@/components/scramble-text"
 import { Reveal } from "@/components/reveal"
 
 export function PageShell({ children }: { children: ReactNode }) {
-  return <div className="max-w-3xl mx-auto px-5 sm:px-6">{children}</div>
+  return <div className="max-w-7xl mx-auto px-5 sm:px-8">{children}</div>
 }
 
 export function PageHeader({

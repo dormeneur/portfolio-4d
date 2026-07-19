@@ -7,14 +7,15 @@ import { SayHello } from "@/components/say-hello"
 import { cn } from "@/lib/utils"
 
 const tabs = [
-  { id: "call", label: "book a call", icon: CalendarDays },
   { id: "message", label: "send a message", icon: MessageSquare },
+  { id: "call", label: "book a call", icon: CalendarDays },
 ] as const
 
-// ponytail: both panes stay mounted, hidden via CSS — the cal iframe loads once
-// and survives tab switches instead of reloading.
+// ponytail: both panes stay mounted, hidden via CSS — the message tab is the
+// default so the cal iframe finishes loading in the background before anyone
+// clicks "book a call".
 export function ContactTabs() {
-  const [active, setActive] = useState<(typeof tabs)[number]["id"]>("call")
+  const [active, setActive] = useState<(typeof tabs)[number]["id"]>("message")
 
   return (
     <div>
