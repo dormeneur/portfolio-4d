@@ -3,7 +3,6 @@ import Link from "next/link"
 import { ScrambleText } from "@/components/scramble-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { CopyEmail } from "@/components/copy-email"
-import { HeroCube } from "@/components/hero-cube"
 import { GITHUB_URL, LINKEDIN_URL } from "@/lib/constants"
 
 export const metadata: Metadata = {
@@ -68,7 +67,6 @@ export default function HomePage() {
       {/* hero */}
       <section className="relative pt-24 pb-16">
         <div className="absolute inset-x-0 top-0 h-80 bg-dots -z-10" aria-hidden />
-        <HeroCube />
 
         <ScrambleText
           as="h1"

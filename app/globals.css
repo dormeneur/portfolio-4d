@@ -155,6 +155,10 @@
   .animate-fade-in {
     animation: fade-in 0.5s ease-out forwards;
   }
+
+  .animate-spark-pulse {
+    animation: spark-pulse 1.1s ease-in-out infinite;
+  }
 }
 
 @keyframes fade-in {
@@ -174,6 +178,16 @@
   }
 }
 
+@keyframes spark-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
     animation: none;
@@ -182,6 +196,9 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+  .animate-spark-pulse {
+    animation: none;
   }
 }
 

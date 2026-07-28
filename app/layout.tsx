@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
+import { BackgroundCube } from '@/components/background-cube'
 import { SITE_URL } from '@/lib/constants'
 import './globals.css'
 
@@ -38,6 +39,7 @@ export default function RootLayout({
           forcedTheme="dark"
           disableTransitionOnChange={false}
         >
+          <BackgroundCube />
           <Navbar />
           <main className="page-transition flex-1">
             {children}
