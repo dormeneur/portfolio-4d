@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
 import { EMAIL } from "@/lib/constants"
 
+// Cloudflare Pages (next-on-pages) only runs server routes on the edge runtime.
+export const runtime = "edge"
+
 // ponytail: one fetch to Resend's REST API — no SDK dependency needed.
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null)

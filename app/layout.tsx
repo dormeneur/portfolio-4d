@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   description: 'Computer Science student specializing in AI Systems, Mobile Development, and Blockchain. Open to internships and collaborations.',
   keywords: ['Aditya Bharti', 'Software Developer', 'Flutter', 'AI', 'Blockchain', 'Portfolio'],
   authors: [{ name: 'Aditya Bharti' }],
+  // served from public/ — app/icon.png would compile to a dynamic route Pages can't run
+  icons: { icon: '/icon.png' },
   openGraph: {
     title: 'Aditya Bharti | Software Developer',
     description: 'Computer Science student specializing in AI Systems, Mobile Development, and Blockchain.',
