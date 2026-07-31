@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
 import { PageShell, PageHeader, Section, SectionLabel } from "@/components/page-shell"
 
 export const metadata: Metadata = {
@@ -176,15 +175,6 @@ export default function AboutPage() {
             </li>
           ))}
         </ul>
-      </Section>
-
-      <Section>
-        <p className="font-serif italic text-xl text-muted-foreground">
-          want to talk?{" "}
-          <Link href="/contact" className="link-underline text-foreground">
-            get in touch →
-          </Link>
-        </p>
       </Section>
     </PageShell>
   )

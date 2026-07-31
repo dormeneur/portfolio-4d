@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Github, Instagram, Linkedin, Mail } from "lucide-react"
+import { Github, Instagram, Linkedin, Mail, Phone } from "lucide-react"
 import { PageShell, PageHeader, Section } from "@/components/page-shell"
 import { ContactTabs } from "@/components/contact-tabs"
 import { CopyEmail } from "@/components/copy-email"
@@ -47,8 +47,9 @@ export default function ContactPage() {
         </div>
         <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-sm text-muted-foreground">
           {LOCATIONS.map((loc) => (
-            <span key={loc.code}>
-              {loc.city}: {loc.phone}
+            <span key={loc.code} className="inline-flex items-center gap-2">
+              <Phone className="h-4 w-4 text-primary" aria-hidden />
+              {loc.phone}
             </span>
           ))}
         </div>
