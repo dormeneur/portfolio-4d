@@ -25,34 +25,10 @@ const work = [
     href: "https://github.com/dormeneur/VHELP",
   },
   {
-    name: "jms",
-    note: "jewelry manufacturing erp + crm for sparkling gems co., bangkok",
-    tech: ["fastapi", "postgresql", "flutter"],
-    href: "/projects",
-  },
-  {
-    name: "queez",
-    note: "ai quiz platform · hack-n-droid 2025 runner-up, built in 24h",
-    tech: ["flutter", "websockets", "ai"],
-    href: "https://github.com/dormeneur/Queez",
-  },
-  {
-    name: "junkwunk",
-    note: "recycling marketplace connecting rag pickers and sellers",
-    tech: ["flutter", "aws"],
-    href: "https://github.com/dormeneur/JUNKWUNK",
-  },
-  {
     name: "jarvis",
     note: "offline ai second brain, git-style synced laptop ↔ phone",
     tech: ["ollama", "tailscale"],
     href: "https://github.com/dormeneur/JARVIS",
-  },
-  {
-    name: "cyber gallery",
-    note: "nft art gallery on ethereum sepolia with erc-721 minting",
-    tech: ["solidity", "ipfs"],
-    href: "https://art-gallery-iota-one.vercel.app/",
   },
 ]
 
@@ -126,7 +102,7 @@ export default function HomePage() {
 
       {/* selected work */}
       <Section label="selected work" num="01">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 gap-4">
           {work.map((p) => (
             <a
               key={p.name}
