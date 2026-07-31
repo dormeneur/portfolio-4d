@@ -55,14 +55,16 @@ export default function HomePage() {
 
         <div className="mt-8 max-w-2xl space-y-4 text-muted-foreground leading-relaxed">
           <p>
-            third-year cs undergrad at vit chennai. i mostly build mobile apps and backends — one
-            of them, <span className="text-foreground font-medium">v help</span>, quietly became
-            part of 1260+ students&apos; daily routine, which still catches me off guard.
+            final-year cs undergrad at vit chennai, closing in on four years of turning caffeine
+            and stubbornness into software. i build across the stack —{" "}
+            <span className="text-foreground font-medium">mobile apps, backends, ai systems</span>,
+            the occasional smart contract — with a habit of shipping things people actually use
+            instead of things that just demo well.
           </p>
           <p>
-            lately: rebuilding a jewelry factory&apos;s erp from scratch in bangkok, and teaching an
-            offline ai to be my second brain. the rest of the time i&apos;m probably taking
-            something apart to see why it worked.
+            most of what i make ends up in real hands — students, small teams, the odd hackathon
+            judge who wasn&apos;t expecting it to work. the rest of the time i&apos;m probably
+            taking something apart to see why it did.
           </p>
         </div>
 

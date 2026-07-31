@@ -5,7 +5,7 @@ import { PageShell, PageHeader, Section, SectionLabel } from "@/components/page-
 export const metadata: Metadata = {
   title: "About & Skills | Aditya Bharti",
   description:
-    "Thai national raised in India, third-year CS student at VIT Chennai — plus the full toolbox: Python, Flutter, PyTorch, FastAPI, and more.",
+    "Thai national raised in India, final-year CS student at VIT Chennai — plus the full toolbox: Python, Flutter, PyTorch, FastAPI, and more.",
 }
 
 const skillGroups = [
@@ -99,7 +99,7 @@ export default function AboutPage() {
         </div>
         <div className="space-y-4 text-muted-foreground leading-relaxed">
           <p>
-            born in thailand and educated in india, i&apos;m a third-year computer science
+            born in thailand and educated in india, i&apos;m a final-year computer science
             undergraduate at vit chennai. my work spans mobile applications, backend systems, and
             applied ai — engineered for production, not just demos.
           </p>
