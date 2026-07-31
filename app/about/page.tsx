@@ -22,17 +22,35 @@ const skillGroups = [
   {
     label: "frameworks & tools",
     num: "c",
-    items: ["Flutter", "FastAPI", "Firebase", "Git", "Docker", "AWS", "Figma", "Linux", "Postman"],
+    items: [
+      "Flutter",
+      "FastAPI",
+      "Firebase",
+      "Git",
+      "Docker",
+      "AWS",
+      "Figma",
+      "Linux",
+      "Postman",
+      "Claude Code",
+    ],
   },
   {
     label: "systems",
     num: "d",
-    items: ["Modular Design", "Real-time Processing", "API Development", "Database Design"],
+    items: [
+      "Modular Design",
+      "Real-time Processing",
+      "API Development",
+      "Database Design",
+      "Automation Pipelines",
+      "Secure Data Handling",
+    ],
   },
   {
     label: "embedded",
     num: "e",
-    items: ["Arduino", "Raspberry Pi", "Embedded C"],
+    items: ["Arduino", "Raspberry Pi", "ESP-32", "Embedded C"],
   },
 ]
 
@@ -99,14 +117,16 @@ export default function AboutPage() {
         </div>
         <div className="space-y-4 text-muted-foreground leading-relaxed">
           <p>
-            born in thailand and educated in india, i&apos;m a final-year computer science
-            undergraduate at vit chennai. my work spans mobile applications, backend systems, and
-            applied ai — engineered for production, not just demos.
+            born in thailand, raised in india, and currently finishing a cs degree at vit chennai
+            — final year, for real this time. most of what i do lives across the stack: mobile
+            apps, backend systems, and ai that has to hold up outside a notebook, not just impress
+            in one.
           </p>
           <p>
-            i&apos;ve shipped software used daily by over a thousand people, built enterprise
-            systems solo, and contributed to research in computer vision and quantum networking.
-            i care about the details that make software dependable.
+            i&apos;ve shipped software over a thousand people use daily, built enterprise systems
+            solo end to end, and somehow ended up publishing computer vision research on the side
+            — turns out how you walk is harder to fake than your face. i&apos;d rather software be
+            dependable than impressive.
           </p>
           <dl className="pt-2 border-t border-border/40">
             {quickFacts.map((f) => (

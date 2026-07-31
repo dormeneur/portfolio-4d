@@ -20,12 +20,23 @@ const experiences = [
     title: "software development engineer intern",
     company: "Integra Global Solutions",
     location: "Chennai, India",
-    period: "dec 2025 – jan 2026",
+    period: "dec 2025 – feb 2026",
     type: "internship",
     image: "/bpo.jpeg",
     description: [
       "Worked on real-world software development tasks, following structured reporting and professional development workflows.",
       "Collaborated with the team to maintain code quality, meet delivery timelines, and adapt to industry-standard engineering practices.",
+    ],
+  },
+  {
+    title: "app development intern — system design",
+    company: "Cestrum Technologies Pvt. Ltd.",
+    location: "Chennai, India",
+    period: "oct 2025 – apr 2026",
+    type: "internship",
+    description: [
+      "Worked with the core team on HLD and LLD for a multi-restaurant aggregation platform, translating product requirements into a scalable service and data architecture.",
+      "Drove key architecture and concurrency decisions by applying production experience from V Help, guiding how the platform onboarded and unified multiple restaurant vendors under one system.",
     ],
   },
   {
@@ -57,7 +68,7 @@ const experiences = [
 export const metadata: Metadata = {
   title: "Work & Resume | Aditya Bharti",
   description:
-    "Roles across enterprise software, development, QA, and blockchain — Sparkling Gems, Integra Global Solutions, RingZero Networks, and GDG VIT — plus downloadable resume.",
+    "Roles across enterprise software, development, system design, QA, and blockchain — Sparkling Gems, Integra Global Solutions, Cestrum Technologies, RingZero Networks, and GDG VIT — plus downloadable resume.",
 }
 
 export default function ExperiencePage() {

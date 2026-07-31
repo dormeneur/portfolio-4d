@@ -55,16 +55,17 @@ export default function HomePage() {
 
         <div className="mt-8 max-w-2xl space-y-4 text-muted-foreground leading-relaxed">
           <p>
-            final-year cs undergrad at vit chennai, closing in on four years of turning caffeine
-            and stubbornness into software. i build across the stack —{" "}
-            <span className="text-foreground font-medium">mobile apps, backends, ai systems</span>,
-            the occasional smart contract — with a habit of shipping things people actually use
-            instead of things that just demo well.
+            thai national, raised in india, and about to finish a cs degree at vit chennai — four
+            years in, still not entirely sure how. i spend most of my time building{" "}
+            <span className="text-foreground font-medium">full-stack and ai systems</span>:
+            backends, mobile apps, the occasional model that has to survive real users instead of
+            a jupyter notebook.
           </p>
           <p>
-            most of what i make ends up in real hands — students, small teams, the odd hackathon
-            judge who wasn&apos;t expecting it to work. the rest of the time i&apos;m probably
-            taking something apart to see why it did.
+            i like software that&apos;s boring in the best way — fast, correct, and easy to forget
+            about because it just works. everything else goes into taking things apart to see why
+            they worked in the first place, which is either a personality trait or a long-term
+            liability.
           </p>
         </div>
 
