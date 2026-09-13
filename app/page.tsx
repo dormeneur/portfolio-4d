@@ -10,13 +10,6 @@ export const metadata: Metadata = {
     "CS undergrad at VIT Chennai building things people actually use — Flutter, Firebase, AI, and blockchain.",
 }
 
-const stats = [
-  { value: "1260+", label: "daily app users" },
-  { value: "6+", label: "major projects" },
-  { value: "2nd", label: "hackathon place" },
-  { value: "8.61", label: "cgpa" },
-]
-
 const work = [
   {
     name: "v help",
@@ -41,7 +34,7 @@ export default function HomePage() {
   return (
     <PageShell>
       {/* hero */}
-      <section className="relative pt-24 pb-16">
+      <section className="relative pt-24 sm:pt-32 pb-20">
         <div className="absolute inset-x-0 top-0 h-80 bg-dots -z-10" aria-hidden />
 
         <ScrambleText
@@ -91,16 +84,6 @@ export default function HomePage() {
             let&apos;s talk
           </Link>
         </div>
-      </section>
-
-      {/* stats */}
-      <section className="pb-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {stats.map((s) => (
-          <div key={s.label} className="tile p-4 text-center">
-            <p className="font-display text-2xl sm:text-3xl font-bold text-foreground">{s.value}</p>
-            <p className="mt-1 font-mono text-xs text-muted-foreground">{s.label}</p>
-          </div>
-        ))}
       </section>
 
       {/* selected work */}

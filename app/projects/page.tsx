@@ -56,7 +56,7 @@ const projects: Project[] = [
   {
     title: "queez",
     tagline: "ai-powered learning & live quiz platform",
-    status: "runner-up 🏆",
+    status: "runner-up",
     image: "/queez.png",
     github: "https://github.com/dormeneur/Queez",
     description:

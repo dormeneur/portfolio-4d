@@ -1,8 +1,9 @@
+/* @import must precede every other rule (incl. @tailwind) or browsers drop it */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
 
 @layer base {
   :root {
@@ -73,7 +74,7 @@
     inset: 0;
     z-index: 100;
     pointer-events: none;
-    opacity: 0.05;
+    opacity: 0.025;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
@@ -87,12 +88,12 @@
     @apply animate-fade-in;
   }
 
-  /* sharp bordered tile — brutalist, hover shifts to red */
+  /* sharp bordered tile — hover only warms the border, no jumping cards */
   .tile {
-    @apply rounded-sm border border-border bg-card transition-all duration-300;
+    @apply rounded-sm border border-border/70 bg-card/60 transition-colors duration-300;
   }
   .tile-hover {
-    @apply hover:border-primary/60 hover:-translate-y-1;
+    @apply hover:border-primary/40;
   }
 
   /* small mono tag chip */

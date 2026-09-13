@@ -1,20 +1,17 @@
 "use client"
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import * as THREE from "three"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js"
 
-// fixed geometry — every responsive/phase resize happens on the outer
-// wrapper's transform so these translateZ offsets never fall out of sync
-const SIZE = 160
-const HALF = SIZE / 2
+// real mesh modelled + exported from Blender (beveled cube, glowing red
+// bevel edges) — regenerate with the Blender script, keep this path
+const MODEL_URL = "/models/cube.glb"
 
-const FACES = [
-  { name: "front", transform: `translateZ(${HALF}px)`, className: "from-primary/30 to-black/55" },
-  { name: "back", transform: `rotateY(180deg) translateZ(${HALF}px)`, className: "from-black/85 to-black/95 border-primary/30" },
-  { name: "right", transform: `rotateY(90deg) translateZ(${HALF}px)`, className: "from-primary/18 to-black/70" },
-  { name: "left", transform: `rotateY(-90deg) translateZ(${HALF}px)`, className: "from-black/75 to-black/90 border-primary/40" },
-  { name: "top", transform: `rotateX(90deg) translateZ(${HALF}px)`, className: "from-primary/45 to-primary/10" },
-  { name: "bottom", transform: `rotateX(-90deg) translateZ(${HALF}px)`, className: "from-black/85 to-black/95 border-primary/30" },
-]
+// fixed canvas size — every responsive/phase resize happens on the
+// wrapper's CSS transform, so the WebGL buffer never needs resizing
+const CANVAS = 400
 
 const SPARKS = [
   { dir: "top", delay: "0s", style: { left: "50%", bottom: "50%", width: "3px", height: "46vh", transform: "translateX(-50%)", background: "linear-gradient(to top, hsl(var(--primary)/0.9), transparent)" } },
@@ -44,6 +41,8 @@ function responsiveLayout() {
 
 type Phase = "loading" | "settling" | "ambient"
 
+const DEG = Math.PI / 180
+
 // default assumption is "still loading" — matches the server-rendered
 // markup so there's no hydration mismatch, and a useLayoutEffect on mount
 // corrects it before the browser paints if the page turns out to already
@@ -52,9 +51,8 @@ export function BackgroundCube() {
   const [needsLoader, setNeedsLoader] = useState(true)
   const [phase, setPhase] = useState<Phase>("loading")
   const phaseRef = useRef<Phase>("loading")
-  const rootRef = useRef<HTMLDivElement>(null)
   const positionerRef = useRef<HTMLDivElement>(null)
-  const cubeRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
     phaseRef.current = phase
@@ -76,13 +74,34 @@ export function BackgroundCube() {
 
   useEffect(() => {
     const positioner = positionerRef.current
-    const cube = cubeRef.current
-    if (!positioner || !cube) return
+    const canvas = canvasRef.current
+    if (!positioner || !canvas) return
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
-    // rotation state: base rest tilt + a spring-damped offset that
-    // interaction impulses displace and inertia settles back to zero
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
+    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio))
+    renderer.setSize(CANVAS, CANVAS, false)
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+
+    const scene = new THREE.Scene()
+    const pmrem = new THREE.PMREMGenerator(renderer)
+    const envTexture = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
+    scene.environment = envTexture // metallic body is black without reflections
+    const rim = new THREE.PointLight(0xdb2424, 30, 0, 1.5)
+    rim.position.set(-3, 2, 3)
+    scene.add(rim)
+
+    const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100)
+    camera.position.set(0, 0, 8)
+
+    const pivot = new THREE.Group()
+    scene.add(pivot)
+    new GLTFLoader().load(MODEL_URL, (gltf) => pivot.add(gltf.scene))
+
+    // rotation state (degrees, CSS-era convention): base rest tilt + a
+    // spring-damped offset that interaction impulses displace and inertia
+    // settles back to zero
     const theta = { x: -22, y: 34, z: 0 }
     const velocity = { x: 0, y: 0, z: 0 }
     const restOffset = { x: -22, y: 34, z: 0 }
@@ -202,7 +221,12 @@ export function BackgroundCube() {
       positioner.style.left = `${posX}%`
       positioner.style.top = `${posY}%`
       positioner.style.opacity = String(opacity)
-      cube.style.transform = `translate(-50%, -50%) scale(${scale}) rotateX(${theta.x}deg) rotateY(${theta.y}deg) rotateZ(${theta.z}deg)`
+      canvas.style.transform = `translate(-50%, -50%) scale(${scale})`
+
+      // CSS y-axis points down, WebGL's points up — flip x/z so the rest
+      // pose still shows the top face like the old CSS cube did
+      pivot.rotation.set(-theta.x * DEG, theta.y * DEG, -theta.z * DEG)
+      renderer.render(scene, camera)
 
       rafId = requestAnimationFrame(tick)
     }
@@ -215,6 +239,9 @@ export function BackgroundCube() {
       window.removeEventListener("pointerdown", handlePointerDown)
       window.removeEventListener("scroll", handleScroll)
       window.removeEventListener("resize", handleResize)
+      envTexture.dispose()
+      pmrem.dispose()
+      renderer.dispose()
     }
     // runs once for the component's lifetime — phaseRef.current is read
     // fresh each frame so the physics state (theta/velocity/position) never
@@ -225,7 +252,6 @@ export function BackgroundCube() {
 
   return (
     <div
-      ref={rootRef}
       aria-hidden
       className="pointer-events-none fixed inset-0 overflow-hidden"
       style={{ zIndex: showChrome ? 200 : -1 }}
@@ -250,31 +276,21 @@ export function BackgroundCube() {
           ))}
         </div>
       )}
-      <div
-        ref={positionerRef}
-        className="absolute"
-        style={{ perspective: "700px", left: "50%", top: "50%" }}
-      >
-        <div
-          ref={cubeRef}
-          className="relative h-[160px] w-[160px]"
+      <div ref={positionerRef} className="absolute" style={{ left: "50%", top: "50%" }}>
+        <canvas
+          ref={canvasRef}
+          width={CANVAS}
+          height={CANVAS}
+          className="absolute left-0 top-0 drop-shadow-[0_0_40px_hsl(var(--primary)/0.45)]"
           style={{
-            transformStyle: "preserve-3d",
+            width: CANVAS,
+            height: CANVAS,
             willChange: "transform",
-            // matches the physics loop's initial rest pose so pre-hydration
-            // (and the first frame or two after) render an already-correct
-            // angled cube instead of a flat, top-left-pinned box
-            transform: "translate(-50%, -50%) scale(0.7) rotateX(-22deg) rotateY(34deg)",
+            // matches the physics loop's initial scale so pre-hydration
+            // frames are already centered correctly
+            transform: "translate(-50%, -50%) scale(0.7)",
           }}
-        >
-          {FACES.map((face) => (
-            <div
-              key={face.name}
-              className={`absolute inset-0 border-2 border-primary/70 bg-gradient-to-br shadow-[0_0_50px_-12px_hsl(var(--primary)/0.55)] ${face.className}`}
-              style={{ transform: face.transform }}
-            />
-          ))}
-        </div>
+        />
       </div>
     </div>
   )
