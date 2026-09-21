@@ -96,6 +96,11 @@
     @apply hover:border-primary/40;
   }
 
+  /* solid red button (matches "send message") */
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-sm bg-primary px-6 py-2.5 font-mono text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90;
+  }
+
   /* small mono tag chip */
   .chip {
     @apply inline-flex items-center rounded-sm border border-border px-3 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-primary/60 hover:text-foreground;

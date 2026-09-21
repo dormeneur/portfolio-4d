@@ -1,5 +1,10 @@
 import type { Metadata } from "next"
 import Image from "next/image"
+import aditya from "@/assets/aditya.jpeg"
+import vitLogo from "@/assets/vit_logo.png"
+import sisLogo from "@/assets/sis_logo.jpg"
+import { Instagram } from "lucide-react"
+import { INSTAGRAM_URL } from "@/lib/constants"
 import { PageShell, PageHeader, Section, SectionLabel } from "@/components/page-shell"
 
 export const metadata: Metadata = {
@@ -54,22 +59,15 @@ const skillGroups = [
   },
 ]
 
-const focus = [
-  "mobile & cross-platform apps",
-  "ai/ml systems",
-  "blockchain, web3 & smart contracts",
-  "backend & apis",
-  "computer vision",
-  "rag & vector search",
-]
-
 const education = [
   {
+    logo: vitLogo,
     school: "vit chennai",
     detail: "b.tech, computer science & engineering",
     meta: "2023–2027 · cgpa 8.61",
   },
   {
+    logo: sisLogo,
     school: "surmount international school",
     detail: "higher secondary — science with mathematics",
     meta: "2021–2022 · 91%",
@@ -77,11 +75,8 @@ const education = [
 ]
 
 const interests = [
-  "rag apis & databases",
-  "ai automation & robotics",
-  "blockchain & web3",
-  "open source & linux",
-  "full stack",
+  { name: "calisthenics", note: "doing handstands since i was a kid" },
+  { name: "building products", note: "software people actually use" },
 ]
 
 const languages = [
@@ -90,64 +85,51 @@ const languages = [
   { name: "thai", level: "conversational" },
 ]
 
-const quickFacts = [
-  { k: "education", v: "b.tech cse, vit chennai · 2023–2027" },
-  { k: "based in", v: "chennai, india · open to relocation" },
-  { k: "work rights", v: "india & thailand · thai national (oci)" },
-]
-
 export default function AboutPage() {
   return (
     <PageShell>
-      <PageHeader
-        title="about"
-        accent="two countries, one keyboard."
-        subtitle="thai national, raised in india"
-      />
+      <PageHeader title="about" />
 
       <section className="pb-12 grid sm:grid-cols-[auto_1fr] gap-8 items-start">
-        <div className="tile overflow-hidden w-40 sm:w-48 mx-auto sm:mx-0">
+        <div className="tile overflow-hidden w-48 sm:w-64 mx-auto sm:mx-0">
           <Image
-            src="/profile.png"
+            src={aditya}
             alt="Aditya Bharti"
-            width={192}
-            height={192}
-            className="object-cover aspect-square"
+            className="h-auto w-full"
           />
         </div>
         <div className="space-y-4 text-muted-foreground leading-relaxed">
           <p>
-            born in thailand, raised in india, and currently finishing a cs degree at vit chennai
-            — final year, for real this time. most of what i do lives across the stack: mobile
-            apps, backend systems, and ai that has to hold up outside a notebook, not just impress
-            in one.
+            i&apos;m aditya, a computer science student at vit chennai. i design and ship
+            production software across mobile, backend and applied ai, from a campus app used by
+            1,260+ students every day to an erp and crm i built end to end for a manufacturing
+            company.
           </p>
           <p>
-            i&apos;ve shipped software over a thousand people use daily, built enterprise systems
-            solo end to end, and somehow ended up publishing computer vision research on the side
-            — turns out how you walk is harder to fake than your face. i&apos;d rather software be
-            dependable than impressive.
+            i also do research: a deepfake detection pipeline based on gait analysis, and a
+            graph neural network approach to quantum key distribution routing. i like problems
+            where the system has to be correct, not just impressive.
           </p>
-          <dl className="pt-2 border-t border-border/40">
-            {quickFacts.map((f) => (
-              <div key={f.k} className="flex gap-4 py-2 border-b border-border/40 text-sm">
-                <dt className="font-mono text-xs uppercase tracking-[0.15em] text-muted-foreground/60 w-28 shrink-0 pt-0.5">
-                  {f.k}
-                </dt>
-                <dd className="text-foreground/90">{f.v}</dd>
-              </div>
-            ))}
-          </dl>
+          <p>
+            outside of code i train calisthenics. handstands have been my thing since i was a kid.
+          </p>
         </div>
       </section>
 
       <Section label="education" num="01">
         <div className="grid sm:grid-cols-2 gap-4">
           {education.map((e) => (
-            <div key={e.school} className="tile tile-hover p-5">
-              <p className="font-display font-semibold text-foreground">{e.school}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{e.detail}</p>
-              <p className="mt-2 font-mono text-xs text-muted-foreground/70">{e.meta}</p>
+            <div key={e.school} className="tile tile-hover p-5 flex items-center justify-between gap-5">
+              <div>
+                <p className="font-display font-semibold text-foreground">{e.school}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{e.detail}</p>
+                <p className="mt-2 font-mono text-xs text-muted-foreground/70">{e.meta}</p>
+              </div>
+              <Image
+                src={e.logo}
+                alt=""
+                className="h-[5.5rem] w-auto shrink-0 rounded-sm bg-white"
+              />
             </div>
           ))}
         </div>
@@ -167,23 +149,22 @@ export default function AboutPage() {
               </div>
             </div>
           ))}
-          <div className="tile p-5 border-primary/30 bg-primary/5">
-            <SectionLabel num="⌁">current focus</SectionLabel>
-            <p className="-mt-2 font-serif italic text-lg text-foreground leading-relaxed">
-              {focus.join(" · ")}
-            </p>
-          </div>
         </div>
       </Section>
 
       <Section label="interests" num="03">
-        <div className="flex flex-wrap gap-1.5">
+        <div className="grid sm:grid-cols-2 gap-4">
           {interests.map((i) => (
-            <span key={i} className="chip">
-              {i}
-            </span>
+            <div key={i.name} className="tile tile-hover p-5">
+              <p className="font-display font-semibold text-foreground">{i.name}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{i.note}</p>
+            </div>
           ))}
         </div>
+        <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn mt-6">
+          <Instagram className="h-4 w-4" aria-hidden />
+          see what i&apos;m up to on instagram
+        </a>
       </Section>
 
       <Section label="languages" num="04">

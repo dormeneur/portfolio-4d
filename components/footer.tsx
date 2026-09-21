@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border/40 mt-auto">
       <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-14 pb-8">
-        <p className="font-serif italic text-3xl sm:text-4xl text-foreground">
+        <p className="font-display font-bold text-3xl sm:text-4xl tracking-tight text-foreground">
           have an idea?{" "}
           <Link href="/contact" className="link-underline text-primary">
             let&apos;s talk →

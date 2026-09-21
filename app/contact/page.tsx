@@ -22,7 +22,6 @@ export default function ContactPage() {
     <PageShell>
       <PageHeader
         title="contact"
-        accent="let's build something."
         subtitle="open to internships · freelance · collaborations"
       />
 

@@ -9,11 +9,9 @@ export function PageShell({ children }: { children: ReactNode }) {
 export function PageHeader({
   title,
   subtitle,
-  accent,
 }: {
   title: string
   subtitle?: string
-  accent?: string
 }) {
   return (
     <header className="relative pt-16 sm:pt-20 pb-10">
@@ -22,9 +20,6 @@ export function PageHeader({
         <ScrambleText text={title} />
         <span className="text-primary">.</span>
       </h1>
-      {accent && (
-        <p className="mt-4 font-serif italic text-xl sm:text-2xl text-muted-foreground">{accent}</p>
-      )}
       {subtitle && (
         <p className="mt-3 font-mono text-xs sm:text-sm uppercase tracking-[0.2em] text-muted-foreground/70">
           {subtitle}

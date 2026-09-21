@@ -45,9 +45,9 @@ export function ResumePicker() {
           href={current.download}
           target="_blank"
           rel="noopener noreferrer"
-          className="ml-auto link-underline text-muted-foreground hover:text-foreground transition-colors"
+          className="btn ml-auto"
         >
-          download ↓
+          download
         </a>
       </div>
 

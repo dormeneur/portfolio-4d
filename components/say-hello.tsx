@@ -28,7 +28,7 @@ export function SayHello() {
   if (status === "sent") {
     return (
       <div className="max-w-3xl py-6">
-        <p className="font-serif italic text-2xl text-foreground">
+        <p className="font-display font-bold text-2xl text-foreground">
           message sent<span className="text-primary">.</span>
         </p>
         <p className="mt-2 text-sm text-muted-foreground">thanks — i&apos;ll get back to you soon.</p>
@@ -89,7 +89,7 @@ export function SayHello() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="mt-8 inline-flex items-center gap-2 rounded-sm bg-primary px-6 py-2.5 font-mono text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-60"
+        className="btn mt-8 disabled:opacity-60"
       >
         <Send className="h-4 w-4" aria-hidden />
         {status === "sending" ? "sending…" : "send message"}
