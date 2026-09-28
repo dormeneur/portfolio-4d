@@ -56,7 +56,7 @@ export default function HomePage() {
             <Linkedin className="h-4 w-4" aria-hidden />
             linkedin
           </a>
-          <CopyEmail className="btn">
+          <CopyEmail className="btn" copied={<span className="text-black">✓ copied!</span>}>
             <Mail className="h-4 w-4" aria-hidden />
             email
           </CopyEmail>

@@ -1,10 +1,11 @@
 import Link from "next/link"
 import { CopyEmail } from "@/components/copy-email"
-import { GITHUB_URL, LINKEDIN_URL } from "@/lib/constants"
+import { GITHUB_URL, INSTAGRAM_URL, LINKEDIN_URL } from "@/lib/constants"
 
 const links = [
   { label: "github", href: GITHUB_URL },
   { label: "linkedin", href: LINKEDIN_URL },
+  { label: "instagram", href: INSTAGRAM_URL },
 ]
 
 export function Footer() {

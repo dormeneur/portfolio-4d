@@ -30,7 +30,7 @@ export const projects: Project[] = [
     tagline: "college services & student utility app",
     status: "ongoing",
     image: vhelp,
-    github: "https://github.com/dormeneur/VHELP",
+    live: "https://app.vhelpcc.com",
     tech: ["flutter", "firebase", "real-time db", "cloud functions"],
   },
   {
