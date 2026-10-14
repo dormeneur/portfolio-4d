@@ -53,6 +53,7 @@ export const projects: Project[] = [
     title: "rooms.io",
     tagline: "hotel booking & management app",
     status: "completed",
+    github: "https://github.com/dormeneur/THE-HOTEL-APP",
     tech: ["flutter", "firebase"],
     tags: ["mobile"],
   },
