@@ -3,7 +3,8 @@ import Image from "next/image"
 import { Linkedin } from "lucide-react"
 import { LINKEDIN_URL } from "@/lib/constants"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { PageShell, PageHeader, Section } from "@/components/page-shell"
+import { PageShell, PageHeader, SectionLabel } from "@/components/page-shell"
+import { Reveal } from "@/components/reveal"
 import sparklinggems from "@/assets/sparklinggems.jpeg"
 import bpo from "@/assets/bpo.jpeg"
 import qat from "@/assets/qat.jpg"
@@ -96,6 +97,7 @@ export default function ExperiencePage() {
         subtitle="roles · internships · resume"
       />
 
+      <SectionLabel num="01">work</SectionLabel>
       <div className="relative border-l-2 border-border/40 ml-1.5 pl-8 space-y-8 pb-4">
         {experiences.map((exp) => (
           <div key={exp.company} className="relative">
@@ -157,9 +159,13 @@ export default function ExperiencePage() {
         ))}
       </div>
 
-      <Section label="resume" num="01" id="resume">
-        <ResumePicker />
-      </Section>
+      {/* no border-t here: the timeline already ends the work section */}
+      <section id="resume" className="py-12 scroll-mt-20">
+        <Reveal>
+          <SectionLabel num="02">resume</SectionLabel>
+          <ResumePicker />
+        </Reveal>
+      </section>
 
     </PageShell>
   )

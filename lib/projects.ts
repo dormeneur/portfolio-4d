@@ -15,7 +15,12 @@ export type Project = {
   github?: string
   live?: string
   tech: string[]
+  tags: Tag[]
 }
+
+// filter chips on /projects — keep this list short
+export const TAGS = ["mobile", "ai/ml", "backend", "blockchain", "research"] as const
+export type Tag = (typeof TAGS)[number]
 
 export const projects: Project[] = [
   {
@@ -24,6 +29,7 @@ export const projects: Project[] = [
     tagline: "jewelry manufacturing erp + crm",
     status: "ongoing",
     tech: ["fastapi", "postgresql", "flutter", "docker"],
+    tags: ["mobile", "backend"],
   },
   {
     title: "v help",
@@ -32,6 +38,7 @@ export const projects: Project[] = [
     image: vhelp,
     live: "https://app.vhelpcc.com",
     tech: ["flutter", "firebase", "real-time db", "cloud functions"],
+    tags: ["mobile", "backend"],
   },
   {
     title: "queez",
@@ -40,12 +47,14 @@ export const projects: Project[] = [
     image: queez,
     github: "https://github.com/dormeneur/Queez",
     tech: ["flutter", "websockets", "ai/ml", "firebase"],
+    tags: ["mobile", "ai/ml"],
   },
   {
     title: "rooms.io",
     tagline: "hotel booking & management app",
     status: "completed",
     tech: ["flutter", "firebase"],
+    tags: ["mobile"],
   },
   {
     title: "junkwunk",
@@ -54,6 +63,7 @@ export const projects: Project[] = [
     image: junkwunk,
     github: "https://github.com/dormeneur/JUNKWUNK",
     tech: ["flutter", "aws", "firebase", "google auth"],
+    tags: ["mobile", "backend"],
   },
   {
     title: "jarvis",
@@ -62,6 +72,7 @@ export const projects: Project[] = [
     status: "ongoing",
     github: "https://github.com/dormeneur/JARVIS",
     tech: ["ollama", "tailscale", "python"],
+    tags: ["ai/ml"],
   },
   {
     title: "cyber gallery & nft",
@@ -71,6 +82,7 @@ export const projects: Project[] = [
     github: "https://github.com/dormeneur/ART-GALLERY",
     live: "https://art-gallery-iota-one.vercel.app/",
     tech: ["solidity", "node.js", "ipfs", "metamask"],
+    tags: ["blockchain"],
   },
   {
     title: "deepfake detection",
@@ -79,6 +91,7 @@ export const projects: Project[] = [
     status: "research",
     github: "https://github.com/dormeneur/DeepFake-Detection-Gait-Analysis",
     tech: ["python", "pytorch", "opencv", "cnn"],
+    tags: ["ai/ml", "research"],
   },
   {
     title: "qkd × gnn",
@@ -86,5 +99,6 @@ export const projects: Project[] = [
     status: "research",
     github: "https://github.com/dormeneur/QKD_Optimisation_GNN_fork",
     tech: ["python", "pytorch", "gnn", "quantum"],
+    tags: ["ai/ml", "research"],
   },
 ]

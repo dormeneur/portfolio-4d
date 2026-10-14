@@ -5,18 +5,18 @@ import { cn } from "@/lib/utils"
 
 const resumes = [
   {
-    id: "india",
-    flag: "🇮🇳",
-    label: "india",
-    download: "https://drive.google.com/uc?export=download&id=1y8SddS1SY37tiPVTdXX52OhmErGoGb0j",
-    preview: "https://drive.google.com/file/d/1y8SddS1SY37tiPVTdXX52OhmErGoGb0j/preview",
-  },
-  {
     id: "thailand",
     flag: "🇹🇭",
     label: "thailand",
     download: "https://drive.google.com/uc?export=download&id=1piRTl0dw7cQWOTB5gMpdeGt2kQe9x3A4",
     preview: "https://drive.google.com/file/d/1piRTl0dw7cQWOTB5gMpdeGt2kQe9x3A4/preview",
+  },
+  {
+    id: "india",
+    flag: "🇮🇳",
+    label: "india",
+    download: "https://drive.google.com/uc?export=download&id=1y8SddS1SY37tiPVTdXX52OhmErGoGb0j",
+    preview: "https://drive.google.com/file/d/1y8SddS1SY37tiPVTdXX52OhmErGoGb0j/preview",
   },
 ]
 
