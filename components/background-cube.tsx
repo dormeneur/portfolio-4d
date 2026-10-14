@@ -84,24 +84,24 @@ export function BackgroundCube() {
 
   // Initialize particles from cube surface on mount
   useEffect(() => {
-    // Generate initial spark particles
+    // Generate initial explosion particles
     const initialParticles: Particle[] = []
-    for (let i = 0; i < 20; i++) {
-      const angle = Math.random() * Math.PI * 2
-      const spread = Math.random() * Math.PI / 4
-      const theta = Math.random() * spread - spread / 2
-      const phi = Math.random() * spread - spread / 2
+    for (let i = 0; i < 50; i++) {
+      // Random spherical spread
+      const theta = Math.random() * Math.PI * 2
+      const phi = Math.random() * Math.PI
+      const speed = 3 + Math.random() * 5
       
-      const x = Math.cos(theta) * Math.cos(phi)
-      const y = Math.sin(theta) * Math.cos(phi)
-      const z = Math.sin(phi)
+      const x = Math.sin(phi) * Math.cos(theta) * speed
+      const y = Math.sin(phi) * Math.sin(theta) * speed
+      const z = Math.cos(phi) * speed
       
       initialParticles.push({
         position: [0, 0, 0],
-        velocity: [x * (2 + Math.random() * 3), y * (2 + Math.random() * 3), z * (2 + Math.random() * 3)],
+        velocity: [x, y, z],
         life: 0,
-        maxLife: 60 + Math.random() * 30,
-        size: 2 + Math.random() * 2,
+        maxLife: 30 + Math.random() * 20,
+        size: 3 + Math.random() * 4,
         color: `hsl(var(--primary))`
       })
     }
@@ -113,21 +113,21 @@ export function BackgroundCube() {
     const newParticles = particles.slice()
     
     for (let i = 0; i < count; i++) {
-      const angle = Math.random() * Math.PI * 2
-      const spread = Math.random() * Math.PI / 4
-      const theta = Math.random() * spread - spread / 2
-      const phi = Math.random() * spread - spread / 2
+      // Random spherical spread - more explosive
+      const theta = Math.random() * Math.PI * 2
+      const phi = Math.random() * Math.PI
+      const speed = 5 + Math.random() * 10 // Faster initial speed
       
-      const x = Math.cos(theta) * Math.cos(phi)
-      const y = Math.sin(theta) * Math.cos(phi)
-      const z = Math.sin(phi)
+      const x = Math.sin(phi) * Math.cos(theta) * speed
+      const y = Math.sin(phi) * Math.sin(theta) * speed
+      const z = Math.cos(phi) * speed
       
       newParticles.push({
         position: [...impactPoint],
-        velocity: [x * (2 + Math.random() * 3), y * (2 + Math.random() * 3), z * (2 + Math.random() * 3)],
+        velocity: [x, y, z],
         life: 0,
-        maxLife: 60 + Math.random() * 30,
-        size: 2 + Math.random() * 2,
+        maxLife: 40 + Math.random() * 20, // Shorter life for quick explosion
+        size: 4 + Math.random() * 6, // Larger particles
         color: `hsl(var(--primary))`
       })
     }
@@ -207,7 +207,7 @@ export function BackgroundCube() {
     const handlePointerDown = () => {
       applyImpulse(130)
       // Emit particles from cube center on click
-      emitParticles([0, 0, 0], Math.min(50, dragDistance * 2))
+      emitParticles([0, 0, 0], Math.min(100, dragDistance * 3))
     }
 
     let lastScrollY = window.scrollY
@@ -217,8 +217,8 @@ export function BackgroundCube() {
       lastScrollY = y
       if (Math.abs(delta) > 2) {
         applyImpulse(Math.min(90, Math.abs(delta) * 1.1))
-        // Emit smaller particles on scroll
-        emitParticles([0, 0, 0], 10)
+        // Emit larger particles on scroll
+        emitParticles([0, 0, 0], 30)
       }
     }
 
@@ -289,18 +289,20 @@ export function BackgroundCube() {
         opacity = lerp(opacity, Math.max(0.06, targetOpacity), followRate)
       }
 
-      // Update particles physics
-      setParticles(prev => prev.map(p => {
+// Update particles physics
+      const newParticles = particles.map(p => {
         const [vx, vy, vz] = p.velocity
         const friction = 0.99
         const gravity = 0.001
         
         return {
           ...p,
-          velocity: [vx * friction, vy * friction, vz - gravity],
-          life: p.life - dt * 60
+          velocity: [vx * friction, vy * friction, vz - gravity] as [number, number, number],
+          life: Math.max(0, p.life - 1),
+          position: [p.position[0] + vx * 0.1, p.position[1] + vy * 0.1, p.position[2] + vz * 0.1]
         }
-      }).filter(p => p.life > 0))
+      }).filter(p => p.life > 0)
+      setParticles(newParticles as Particle[])
 
       positioner.style.left = `${posX}%`
       positioner.style.top = `${posY}%`
