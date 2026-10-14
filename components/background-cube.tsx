@@ -50,9 +50,19 @@ const DEG = Math.PI / 180
 export function BackgroundCube() {
   const [needsLoader, setNeedsLoader] = useState(true)
   const [phase, setPhase] = useState<Phase>("loading")
+  const [particles, setParticles] = useState<Particle[]>([])
   const phaseRef = useRef<Phase>("loading")
   const positionerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  type Particle = {
+    position: [number, number, number]
+    velocity: [number, number, number]
+    life: number
+    maxLife: number
+    size: number
+    color: string
+  }
 
   useEffect(() => {
     phaseRef.current = phase
@@ -71,6 +81,59 @@ export function BackgroundCube() {
     window.addEventListener("load", onLoad)
     return () => window.removeEventListener("load", onLoad)
   }, [])
+
+  // Initialize particles from cube surface on mount
+  useEffect(() => {
+    // Generate initial spark particles
+    const initialParticles: Particle[] = []
+    for (let i = 0; i < 20; i++) {
+      const angle = Math.random() * Math.PI * 2
+      const spread = Math.random() * Math.PI / 4
+      const theta = Math.random() * spread - spread / 2
+      const phi = Math.random() * spread - spread / 2
+      
+      const x = Math.cos(theta) * Math.cos(phi)
+      const y = Math.sin(theta) * Math.cos(phi)
+      const z = Math.sin(phi)
+      
+      initialParticles.push({
+        position: [0, 0, 0],
+        velocity: [x * (2 + Math.random() * 3), y * (2 + Math.random() * 3), z * (2 + Math.random() * 3)],
+        life: 0,
+        maxLife: 60 + Math.random() * 30,
+        size: 2 + Math.random() * 2,
+        color: `hsl(var(--primary))`
+      })
+    }
+    setParticles(initialParticles)
+  }, [])
+
+  // Emit particles from a point on the cube
+  const emitParticles = (impactPoint: [number, number, number], count: number) => {
+    const newParticles = particles.slice()
+    
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2
+      const spread = Math.random() * Math.PI / 4
+      const theta = Math.random() * spread - spread / 2
+      const phi = Math.random() * spread - spread / 2
+      
+      const x = Math.cos(theta) * Math.cos(phi)
+      const y = Math.sin(theta) * Math.cos(phi)
+      const z = Math.sin(phi)
+      
+      newParticles.push({
+        position: [...impactPoint],
+        velocity: [x * (2 + Math.random() * 3), y * (2 + Math.random() * 3), z * (2 + Math.random() * 3)],
+        life: 0,
+        maxLife: 60 + Math.random() * 30,
+        size: 2 + Math.random() * 2,
+        color: `hsl(var(--primary))`
+      })
+    }
+    
+    setParticles(newParticles)
+  }
 
   useEffect(() => {
     const positioner = positionerRef.current
@@ -141,14 +204,22 @@ export function BackgroundCube() {
       lastPointer = { x: e.clientX, y: e.clientY }
     }
 
-    const handlePointerDown = () => applyImpulse(130)
+    const handlePointerDown = () => {
+      applyImpulse(130)
+      // Emit particles from cube center on click
+      emitParticles([0, 0, 0], Math.min(50, dragDistance * 2))
+    }
 
     let lastScrollY = window.scrollY
     const handleScroll = () => {
       const y = window.scrollY
       const delta = y - lastScrollY
       lastScrollY = y
-      if (Math.abs(delta) > 2) applyImpulse(Math.min(90, Math.abs(delta) * 1.1))
+      if (Math.abs(delta) > 2) {
+        applyImpulse(Math.min(90, Math.abs(delta) * 1.1))
+        // Emit smaller particles on scroll
+        emitParticles([0, 0, 0], 10)
+      }
     }
 
     const handleResize = () => {
@@ -218,6 +289,19 @@ export function BackgroundCube() {
         opacity = lerp(opacity, Math.max(0.06, targetOpacity), followRate)
       }
 
+      // Update particles physics
+      setParticles(prev => prev.map(p => {
+        const [vx, vy, vz] = p.velocity
+        const friction = 0.99
+        const gravity = 0.001
+        
+        return {
+          ...p,
+          velocity: [vx * friction, vy * friction, vz - gravity],
+          life: p.life - dt * 60
+        }
+      }).filter(p => p.life > 0))
+
       positioner.style.left = `${posX}%`
       positioner.style.top = `${posY}%`
       positioner.style.opacity = String(opacity)
@@ -267,13 +351,29 @@ export function BackgroundCube() {
           className="absolute inset-0 transition-opacity duration-500 ease-out"
           style={{ opacity: phase === "loading" ? 1 : 0 }}
         >
-          {SPARKS.map((s) => (
-            <div
-              key={s.dir}
-              className="absolute animate-spark-pulse blur-[2px]"
-              style={{ ...s.style, animationDelay: s.delay }}
-            />
-          ))}
+          <div>
+            {SPARKS.map((s) => (
+              <div
+                key={s.dir}
+                className="absolute animate-spark-pulse blur-[2px]"
+                style={{ ...s.style, animationDelay: s.delay }}
+              />
+            ))}
+            {particles.map((p, i) => (
+              <div
+                key={i}
+                className="absolute rounded-full bg-primary/50 blur-sm"
+                style={{
+                  width: p.size,
+                  height: p.size,
+                  left: `${p.position[0] + 50}%`,
+                  top: `${p.position[1] + 50}%`,
+                  opacity: Math.max(0, Math.min(1, p.life / p.maxLife)),
+                  transform: `translate(-50%, -50%) scale(${1 + (p.life / p.maxLife) * 0.5})`
+                }}
+              />
+            ))}
+          </div>
         </div>
       )}
       <div ref={positionerRef} className="absolute" style={{ left: "50%", top: "50%" }}>
