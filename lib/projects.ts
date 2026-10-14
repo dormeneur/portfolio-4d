@@ -2,10 +2,10 @@ import type { StaticImageData } from "next/image"
 import vhelp from "@/assets/vhelp.png"
 import queez from "@/assets/queez.png"
 import junkwunk from "@/assets/junkwunk.jpg"
-import artgallery from "@/assets/artgallery.png"
-import jms from "@/assets/jms.png"
+import artgallery from "@/assets/artgallery.jpg"
+import jms from "@/assets/jms.jpg"
 import jarvis from "@/assets/jarvis.png"
-import deepfake from "@/assets/deepfake.png"
+import deepfake from "@/assets/deepfake.jpg"
 
 export type Project = {
   title: string

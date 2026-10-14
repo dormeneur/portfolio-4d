@@ -25,3 +25,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local-only: personal reference docs and Claude Code permissions
+ABOUT/
+.claude/settings.local.json
