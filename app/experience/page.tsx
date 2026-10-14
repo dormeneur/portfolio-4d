@@ -132,7 +132,7 @@ export default function ExperiencePage() {
                     </ul>
                   </details>
                   <a
-                    href={`${LINKEDIN_URL}/details/experience/`}
+                    href={`${LINKEDIN_URL}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="chip mt-4 gap-1.5"
