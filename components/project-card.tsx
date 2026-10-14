@@ -34,14 +34,15 @@ export function ProjectCard({ p, priority }: { p: Project; priority?: boolean })
             </span>
           ))}
         </div>
+        {/* always two columns; a lone button sits in the right one */}
         {(p.github || p.live) && (
-          <div className="flex gap-2 pt-2 font-mono text-xs">
+          <div className="grid grid-cols-2 gap-2 pt-2 font-mono text-xs [&>:only-child]:col-start-2">
             {p.github && (
               <a
                 href={p.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-sm bg-[#238636] px-3 py-2 text-white hover:bg-[#2ea043] transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 rounded-sm bg-[#238636] px-3 py-2 text-white hover:bg-[#2ea043] transition-colors"
               >
                 <Github className="h-3.5 w-3.5" aria-hidden /> github
               </a>
@@ -51,7 +52,7 @@ export function ProjectCard({ p, priority }: { p: Project; priority?: boolean })
                 href={p.live}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-sm bg-yellow-400 px-3 py-2 text-black hover:bg-yellow-300 transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 rounded-sm bg-yellow-400 px-3 py-2 text-black hover:bg-yellow-300 transition-colors"
               >
                 <ExternalLink className="h-3.5 w-3.5" aria-hidden /> live
               </a>
