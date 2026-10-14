@@ -102,7 +102,7 @@ export default function AboutPage() {
           <p>
             i&apos;m aditya, a computer science student at vit chennai. i design and ship
             production software across mobile, backend and applied ai, from a campus app used by
-            1,260+ students every day to an erp and crm i built end to end for a manufacturing
+            1,280+ students every day to an erp and crm i built end to end for a manufacturing
             company.
           </p>
           <p>
