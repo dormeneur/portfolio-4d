@@ -85,14 +85,14 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between gap-4">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between gap-2 sm:gap-4">
         <Link
           href="/"
           className="font-display font-bold text-foreground hover:text-primary transition-colors shrink-0"
         >
           ab<span className="text-primary">.</span>
         </Link>
-        <div className="flex flex-wrap justify-end gap-x-4 gap-y-1 font-mono text-sm">
+        <div className="flex flex-wrap justify-end gap-y-1 sm:gap-x-4 font-mono text-[13px] sm:text-sm">
           {navItems.map((item) => {
             const active = pathname === item.href
             return (
@@ -101,8 +101,11 @@ export function Navbar() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "group transition-colors",
-                  active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  // phone: filled pill marks the current page; desktop keeps the [key] hint instead
+                  "group rounded-full px-1.5 py-1 sm:p-0 transition-colors duration-300",
+                  active
+                    ? "bg-primary text-primary-foreground sm:bg-transparent sm:text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 <span

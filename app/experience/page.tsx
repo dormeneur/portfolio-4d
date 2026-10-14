@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import { Linkedin } from "lucide-react"
 import { LINKEDIN_URL } from "@/lib/constants"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { PageShell, PageHeader, Section } from "@/components/page-shell"
 import sparklinggems from "@/assets/sparklinggems.jpeg"
 import bpo from "@/assets/bpo.jpeg"
@@ -116,29 +117,29 @@ export default function ExperiencePage() {
                   </div>
                   <p className="mt-1 font-mono text-sm text-primary/80">{exp.title}</p>
                   <span className="chip mt-3">{exp.type}</span>
-                  <ul className="mt-4">
-                    <Bullet text={exp.description[0]} />
-                  </ul>
-                  {/* native <details>: no JS, keeps this a server component */}
-                  <details className="group/more">
-                    <summary className="mt-3 inline-block cursor-pointer list-none font-mono text-xs text-primary/80 hover:text-primary transition-colors [&::-webkit-details-marker]:hidden">
-                      <span className="group-open/more:hidden">+ show more</span>
-                      <span className="hidden group-open/more:inline">− show less</span>
-                    </summary>
-                    <ul className="mt-3 space-y-2">
-                      {exp.description.slice(1).map((d, i) => (
-                        <Bullet key={i} text={d} />
-                      ))}
-                    </ul>
-                  </details>
-                  <a
-                    href={`${LINKEDIN_URL}/details/experience/`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="chip mt-4 gap-1.5"
-                  >
-                    <Linkedin className="h-3.5 w-3.5" /> view on linkedin ↗
-                  </a>
+                  <Collapsible>
+                    <div className="mt-5 grid grid-cols-2 sm:flex gap-3 font-mono text-xs">
+                      <CollapsibleTrigger className="group/more inline-flex items-center justify-center rounded-sm border border-border px-3 py-2 text-foreground hover:border-primary/60 transition-colors">
+                        <span className="group-data-[state=open]/more:hidden">+ show more</span>
+                        <span className="hidden group-data-[state=open]/more:inline">− show less</span>
+                      </CollapsibleTrigger>
+                      <a
+                        href={LINKEDIN_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-1.5 rounded-sm bg-[#0A66C2] px-3 py-2 text-white hover:bg-[#004182] transition-colors"
+                      >
+                        <Linkedin className="h-3.5 w-3.5" /> linkedin
+                      </a>
+                    </div>
+                    <CollapsibleContent>
+                      <ul className="mt-4 space-y-2">
+                        {exp.description.map((d, i) => (
+                          <Bullet key={i} text={d} />
+                        ))}
+                      </ul>
+                    </CollapsibleContent>
+                  </Collapsible>
                 </div>
                 {exp.image && (
                   <div className="relative h-52 sm:h-auto sm:w-72 lg:w-96 shrink-0 border-b sm:border-b-0 sm:border-l border-border/60">
