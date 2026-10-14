@@ -37,6 +37,52 @@ export function Navbar() {
     return () => window.removeEventListener("keydown", onKey)
   }, [router])
 
+  // phone-only: swipe left → next nav page, swipe right → previous
+  useEffect(() => {
+    let start: { x: number; y: number } | null = null
+
+    const scrollsSideways = (el: EventTarget | null) => {
+      for (let n = el instanceof Element ? el : null; n && n !== document.body; n = n.parentElement) {
+        const ox = getComputedStyle(n).overflowX
+        if ((ox === "auto" || ox === "scroll") && n.scrollWidth > n.clientWidth) return true
+      }
+      return false
+    }
+
+    const onStart = (e: TouchEvent) => {
+      const t = e.touches[0]
+      start = null
+      if (
+        e.touches.length > 1 ||
+        !window.matchMedia("(max-width: 767px)").matches ||
+        (window.visualViewport?.scale ?? 1) > 1 || // zoomed in = user is panning
+        t.clientX < 24 || t.clientX > window.innerWidth - 24 || // leave edges to the OS back gesture
+        scrollsSideways(e.target)
+      )
+        return
+      start = { x: t.clientX, y: t.clientY }
+    }
+
+    const onEnd = (e: TouchEvent) => {
+      if (!start || window.getSelection()?.toString()) return
+      const t = e.changedTouches[0]
+      const dx = t.clientX - start.x
+      const dy = t.clientY - start.y
+      start = null
+      if (Math.abs(dx) < 80 || Math.abs(dx) < Math.abs(dy) * 2) return
+      const i = navItems.findIndex((n) => n.href === pathname)
+      const next = navItems[i + (dx < 0 ? 1 : -1)]
+      if (i !== -1 && next) router.push(next.href)
+    }
+
+    window.addEventListener("touchstart", onStart, { passive: true })
+    window.addEventListener("touchend", onEnd, { passive: true })
+    return () => {
+      window.removeEventListener("touchstart", onStart)
+      window.removeEventListener("touchend", onEnd)
+    }
+  }, [pathname, router])
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between gap-4">

@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
+import { Linkedin } from "lucide-react"
+import { LINKEDIN_URL } from "@/lib/constants"
 import { PageShell, PageHeader, Section } from "@/components/page-shell"
 import sparklinggems from "@/assets/sparklinggems.jpeg"
 import bpo from "@/assets/bpo.jpeg"
@@ -76,6 +78,15 @@ export const metadata: Metadata = {
     "Roles across enterprise software, development, system design, QA, and blockchain — Sparkling Gems, Integra Global Solutions, Cestrum Technologies, RingZero Networks, and GDG VIT — plus downloadable resume.",
 }
 
+function Bullet({ text }: { text: string }) {
+  return (
+    <li className="flex gap-2 text-sm text-muted-foreground leading-relaxed">
+      <span className="text-primary/50 select-none">—</span>
+      <span>{text}</span>
+    </li>
+  )
+}
+
 export default function ExperiencePage() {
   return (
     <PageShell>
@@ -105,17 +116,29 @@ export default function ExperiencePage() {
                   </div>
                   <p className="mt-1 font-mono text-sm text-primary/80">{exp.title}</p>
                   <span className="chip mt-3">{exp.type}</span>
-                  <ul className="mt-4 space-y-2">
-                    {exp.description.map((d, i) => (
-                      <li
-                        key={i}
-                        className="flex gap-2 text-sm text-muted-foreground leading-relaxed"
-                      >
-                        <span className="text-primary/50 select-none">—</span>
-                        <span>{d}</span>
-                      </li>
-                    ))}
+                  <ul className="mt-4">
+                    <Bullet text={exp.description[0]} />
                   </ul>
+                  {/* native <details>: no JS, keeps this a server component */}
+                  <details className="group/more">
+                    <summary className="mt-3 inline-block cursor-pointer list-none font-mono text-xs text-primary/80 hover:text-primary transition-colors [&::-webkit-details-marker]:hidden">
+                      <span className="group-open/more:hidden">+ show more</span>
+                      <span className="hidden group-open/more:inline">− show less</span>
+                    </summary>
+                    <ul className="mt-3 space-y-2">
+                      {exp.description.slice(1).map((d, i) => (
+                        <Bullet key={i} text={d} />
+                      ))}
+                    </ul>
+                  </details>
+                  <a
+                    href={`${LINKEDIN_URL}/details/experience/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="chip mt-4 gap-1.5"
+                  >
+                    <Linkedin className="h-3.5 w-3.5" /> view on linkedin ↗
+                  </a>
                 </div>
                 {exp.image && (
                   <div className="relative h-52 sm:h-auto sm:w-72 lg:w-96 shrink-0 border-b sm:border-b-0 sm:border-l border-border/60">
