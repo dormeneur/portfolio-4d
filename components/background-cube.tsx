@@ -5,13 +5,19 @@ import * as THREE from "three"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js"
 
-// real mesh modelled + exported from Blender (beveled cube, glowing red
-// bevel edges) — regenerate with the Blender script, keep this path
-const MODEL_URL = "/models/cube.glb"
+// cube pre-fractured into 28 Voronoi cells in Blender (same cell-by-cell
+// half-space clipping Voro++ does); each shard's origin is its own centre,
+// so it can be flung and spun via its node transform alone
+const MODEL_URL = "/models/cube-shards.glb"
+
+// glow of the cut (interior) faces. the exported strength is high enough
+// that ACES tone mapping bleaches it to peach; ~0.5 keeps it crimson
+const CORE_GLOW = 0.5
 
 // fixed canvas size — every responsive/phase resize happens on the
-// wrapper's CSS transform, so the WebGL buffer never needs resizing
-const CANVAS = 400
+// wrapper's CSS transform, so the WebGL buffer never needs resizing.
+// big enough that shards at full burst don't clip at the canvas edge
+const CANVAS = 560
 
 const SPARKS = [
   { dir: "top", delay: "0s", style: { left: "50%", bottom: "50%", width: "3px", height: "46vh", transform: "translateX(-50%)", background: "linear-gradient(to top, hsl(var(--primary)/0.9), transparent)" } },
@@ -20,12 +26,8 @@ const SPARKS = [
   { dir: "right", delay: "0.45s", style: { top: "50%", left: "50%", height: "3px", width: "46vw", transform: "translateY(-50%)", background: "linear-gradient(to right, hsl(var(--primary)/0.9), transparent)" } },
 ]
 
-function randomAxis() {
-  const x = Math.random() * 2 - 1
-  const y = Math.random() * 2 - 1
-  const z = Math.random() * 2 - 1
-  const len = Math.hypot(x, y, z) || 1
-  return { x: x / len, y: y / len, z: z / len }
+function randomUnit() {
+  return new THREE.Vector3(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1).normalize()
 }
 
 // on narrow screens the hero copy spans the full width, so the cube is
@@ -41,6 +43,15 @@ function responsiveLayout() {
 
 type Phase = "loading" | "settling" | "ambient"
 
+type Shard = {
+  mesh: THREE.Object3D
+  home: THREE.Vector3 // assembled position
+  dir: THREE.Vector3 // outward fling direction
+  reach: number // per-shard distance multiplier so the burst isn't uniform
+  axis: THREE.Vector3 // tumble axis
+  spin: number // tumble radians per unit of burst
+}
+
 const DEG = Math.PI / 180
 
 // default assumption is "still loading" — matches the server-rendered
@@ -50,19 +61,9 @@ const DEG = Math.PI / 180
 export function BackgroundCube() {
   const [needsLoader, setNeedsLoader] = useState(true)
   const [phase, setPhase] = useState<Phase>("loading")
-  const [particles, setParticles] = useState<Particle[]>([])
   const phaseRef = useRef<Phase>("loading")
   const positionerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  type Particle = {
-    position: [number, number, number]
-    velocity: [number, number, number]
-    life: number
-    maxLife: number
-    size: number
-    color: string
-  }
 
   useEffect(() => {
     phaseRef.current = phase
@@ -82,59 +83,6 @@ export function BackgroundCube() {
     return () => window.removeEventListener("load", onLoad)
   }, [])
 
-  // Initialize particles from cube surface on mount
-  useEffect(() => {
-    // Generate initial spark particles
-    const initialParticles: Particle[] = []
-    for (let i = 0; i < 20; i++) {
-      const angle = Math.random() * Math.PI * 2
-      const spread = Math.random() * Math.PI / 4
-      const theta = Math.random() * spread - spread / 2
-      const phi = Math.random() * spread - spread / 2
-      
-      const x = Math.cos(theta) * Math.cos(phi)
-      const y = Math.sin(theta) * Math.cos(phi)
-      const z = Math.sin(phi)
-      
-      initialParticles.push({
-        position: [0, 0, 0],
-        velocity: [x * (2 + Math.random() * 3), y * (2 + Math.random() * 3), z * (2 + Math.random() * 3)],
-        life: 0,
-        maxLife: 60 + Math.random() * 30,
-        size: 2 + Math.random() * 2,
-        color: `hsl(var(--primary))`
-      })
-    }
-    setParticles(initialParticles)
-  }, [])
-
-  // Emit particles from a point on the cube
-  const emitParticles = (impactPoint: [number, number, number], count: number) => {
-    const newParticles = particles.slice()
-    
-    for (let i = 0; i < count; i++) {
-      const angle = Math.random() * Math.PI * 2
-      const spread = Math.random() * Math.PI / 4
-      const theta = Math.random() * spread - spread / 2
-      const phi = Math.random() * spread - spread / 2
-      
-      const x = Math.cos(theta) * Math.cos(phi)
-      const y = Math.sin(theta) * Math.cos(phi)
-      const z = Math.sin(phi)
-      
-      newParticles.push({
-        position: [...impactPoint],
-        velocity: [x * (2 + Math.random() * 3), y * (2 + Math.random() * 3), z * (2 + Math.random() * 3)],
-        life: 0,
-        maxLife: 60 + Math.random() * 30,
-        size: 2 + Math.random() * 2,
-        color: `hsl(var(--primary))`
-      })
-    }
-    
-    setParticles(newParticles)
-  }
-
   useEffect(() => {
     const positioner = positionerRef.current
     const canvas = canvasRef.current
@@ -150,17 +98,44 @@ export function BackgroundCube() {
     const scene = new THREE.Scene()
     const pmrem = new THREE.PMREMGenerator(renderer)
     const envTexture = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
-    scene.environment = envTexture // metallic body is black without reflections
+    scene.environment = envTexture // metallic shell is black without reflections
     const rim = new THREE.PointLight(0xdb2424, 30, 0, 1.5)
     rim.position.set(-3, 2, 3)
     scene.add(rim)
 
+    // pulled back in step with the larger canvas so the assembled cube
+    // keeps the same on-screen size it had before
     const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100)
-    camera.position.set(0, 0, 8)
+    camera.position.set(0, 0, 11.2)
 
     const pivot = new THREE.Group()
     scene.add(pivot)
-    new GLTFLoader().load(MODEL_URL, (gltf) => pivot.add(gltf.scene))
+
+    const shards: Shard[] = []
+    new GLTFLoader().load(MODEL_URL, (gltf) => {
+      pivot.add(gltf.scene)
+      gltf.scene.traverse((node) => {
+        if (!(node as THREE.Mesh).isMesh) return
+        const material = (node as THREE.Mesh).material as THREE.MeshStandardMaterial
+        if (material.name === "ShardCore") material.emissiveIntensity = CORE_GLOW
+        // a multi-material shard exports as a group of primitives; animate
+        // the node that owns the transform, not each primitive
+        const owner = node.parent && node.parent !== gltf.scene ? node.parent : node
+        if (shards.some((s) => s.mesh === owner)) return
+        const home = owner.position.clone()
+        // outward from the cube centre, roughened so cells don't fly in a
+        // perfect starburst
+        const dir = home.clone().normalize().multiplyScalar(0.8).add(randomUnit().multiplyScalar(0.35)).normalize()
+        shards.push({
+          mesh: owner,
+          home,
+          dir,
+          reach: 0.7 + Math.random() * 0.6,
+          axis: randomUnit(),
+          spin: (Math.random() * 2 - 1) * 1.8,
+        })
+      })
+    })
 
     // rotation state (degrees, CSS-era convention): base rest tilt + a
     // spring-damped offset that interaction impulses displace and inertia
@@ -168,6 +143,11 @@ export function BackgroundCube() {
     const theta = { x: -22, y: 34, z: 0 }
     const velocity = { x: 0, y: 0, z: 0 }
     const restOffset = { x: -22, y: 34, z: 0 }
+
+    // shatter state: how far the shards are flung out (0 = assembled cube).
+    // a damped spring pulls it back to 0, so every burst reassembles itself
+    let burst = 0
+    let burstVel = 0
 
     // position/scale/opacity glide toward whatever the current phase wants —
     // seeded from the *actual* starting phase so an already-loaded page
@@ -185,10 +165,16 @@ export function BackgroundCube() {
 
     const applyImpulse = (strength: number) => {
       if (reduceMotion) return
-      const axis = randomAxis()
+      const axis = randomUnit()
       velocity.x += axis.x * strength
       velocity.y += axis.y * strength
       velocity.z += axis.z * strength
+    }
+
+    const shatter = (strength: number) => {
+      if (reduceMotion) return
+      // capped so rapid clicks can't fling shards off the canvas
+      burstVel = Math.min(burstVel + strength, 12)
     }
 
     const handlePointerMove = (e: PointerEvent) => {
@@ -206,8 +192,7 @@ export function BackgroundCube() {
 
     const handlePointerDown = () => {
       applyImpulse(130)
-      // Emit particles from cube center on click
-      emitParticles([0, 0, 0], Math.min(50, dragDistance * 2))
+      shatter(9)
     }
 
     let lastScrollY = window.scrollY
@@ -217,8 +202,7 @@ export function BackgroundCube() {
       lastScrollY = y
       if (Math.abs(delta) > 2) {
         applyImpulse(Math.min(90, Math.abs(delta) * 1.1))
-        // Emit smaller particles on scroll
-        emitParticles([0, 0, 0], 10)
+        shatter(Math.min(2.5, Math.abs(delta) * 0.04))
       }
     }
 
@@ -251,6 +235,10 @@ export function BackgroundCube() {
           theta.x += velocity.x * dt
           theta.y += velocity.y * dt
           theta.z += velocity.z * dt
+          // shards breathe apart and together while the page loads, then
+          // the spring below snaps them shut once loading finishes
+          burst = 0.45 + Math.sin(t * 0.004) * 0.35
+          burstVel = 0
         }
 
         posX = 50
@@ -268,6 +256,11 @@ export function BackgroundCube() {
           velocity[axis] += accel * dt
           theta[axis] += velocity[axis] * dt
         })
+
+        // underdamped on purpose: shards overshoot slightly as they slam
+        // back together, which reads as a physical snap rather than a fade
+        burstVel += (-14 * burst - 5.5 * burstVel) * dt
+        burst = Math.max(0, burst + burstVel * dt)
 
         const scrollY = window.scrollY
         const docH = document.documentElement.scrollHeight - window.innerHeight
@@ -289,18 +282,10 @@ export function BackgroundCube() {
         opacity = lerp(opacity, Math.max(0.06, targetOpacity), followRate)
       }
 
-      // Update particles physics
-      setParticles(prev => prev.map(p => {
-        const [vx, vy, vz] = p.velocity
-        const friction = 0.99
-        const gravity = 0.001
-        
-        return {
-          ...p,
-          velocity: [vx * friction, vy * friction, vz - gravity],
-          life: p.life - dt * 60
-        }
-      }).filter(p => p.life > 0))
+      for (const s of shards) {
+        s.mesh.position.copy(s.home).addScaledVector(s.dir, burst * s.reach)
+        s.mesh.quaternion.setFromAxisAngle(s.axis, burst * s.spin)
+      }
 
       positioner.style.left = `${posX}%`
       positioner.style.top = `${posY}%`
@@ -351,29 +336,13 @@ export function BackgroundCube() {
           className="absolute inset-0 transition-opacity duration-500 ease-out"
           style={{ opacity: phase === "loading" ? 1 : 0 }}
         >
-          <div>
-            {SPARKS.map((s) => (
-              <div
-                key={s.dir}
-                className="absolute animate-spark-pulse blur-[2px]"
-                style={{ ...s.style, animationDelay: s.delay }}
-              />
-            ))}
-            {particles.map((p, i) => (
-              <div
-                key={i}
-                className="absolute rounded-full bg-primary/50 blur-sm"
-                style={{
-                  width: p.size,
-                  height: p.size,
-                  left: `${p.position[0] + 50}%`,
-                  top: `${p.position[1] + 50}%`,
-                  opacity: Math.max(0, Math.min(1, p.life / p.maxLife)),
-                  transform: `translate(-50%, -50%) scale(${1 + (p.life / p.maxLife) * 0.5})`
-                }}
-              />
-            ))}
-          </div>
+          {SPARKS.map((s) => (
+            <div
+              key={s.dir}
+              className="absolute animate-spark-pulse blur-[2px]"
+              style={{ ...s.style, animationDelay: s.delay }}
+            />
+          ))}
         </div>
       )}
       <div ref={positionerRef} className="absolute" style={{ left: "50%", top: "50%" }}>
