@@ -102,7 +102,7 @@ export function Navbar() {
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   // phone: filled pill marks the current page; desktop keeps the [key] hint instead
-                  "group rounded-full px-1.5 py-1 sm:p-0 transition-colors duration-300",
+                  "group rounded-md px-1.5 py-1 sm:p-0 transition-colors duration-300",
                   active
                     ? "bg-primary text-primary-foreground sm:bg-transparent sm:text-foreground"
                     : "text-muted-foreground hover:text-foreground"

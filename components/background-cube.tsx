@@ -75,12 +75,12 @@ export function BackgroundCube() {
       setPhase("ambient")
       return
     }
-    const onLoad = () => {
-      setPhase("settling")
-      window.setTimeout(() => setPhase("ambient"), 1400)
-    }
-    window.addEventListener("load", onLoad)
-    return () => window.removeEventListener("load", onLoad)
+    // hydrated = the page is usable, so lift the loader now. waiting for
+    // window "load" held it for the resume iframe, every image and the GLB.
+    // the loader only ever covers SSR html → hydration, never longer
+    setPhase("settling")
+    const id = window.setTimeout(() => setPhase("ambient"), 1400)
+    return () => window.clearTimeout(id)
   }, [])
 
   useEffect(() => {
@@ -327,13 +327,13 @@ export function BackgroundCube() {
     >
       {showChrome && (
         <div
-          className="absolute inset-0 bg-background transition-opacity duration-500 ease-out"
+          className="absolute inset-0 bg-background transition-opacity duration-300 ease-out"
           style={{ opacity: phase === "loading" ? 1 : 0 }}
         />
       )}
       {showChrome && (
         <div
-          className="absolute inset-0 transition-opacity duration-500 ease-out"
+          className="absolute inset-0 transition-opacity duration-300 ease-out"
           style={{ opacity: phase === "loading" ? 1 : 0 }}
         >
           {SPARKS.map((s) => (
